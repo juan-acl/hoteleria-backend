@@ -18,7 +18,7 @@ public class HoteleriaAppApplication {
 
 	@GetMapping("/")
 	public ResponseEntity<EmailResponse> index() {
-		return ResponseEntity.ok().body(new EmailResponse("Welcome to my api", 200));
+		return ResponseEntity.ok().body(new EmailResponse("Welcome to hoteleria api", 200));
 	}
 
 }

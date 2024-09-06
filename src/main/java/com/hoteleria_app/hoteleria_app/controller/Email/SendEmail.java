@@ -1,4 +1,4 @@
-package com.hoteleria_app.hoteleria_app.controller;
+package com.hoteleria_app.hoteleria_app.controller.Email;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
