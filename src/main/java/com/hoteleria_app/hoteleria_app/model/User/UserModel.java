@@ -19,7 +19,6 @@ public class UserModel {
 
     private String name;
     private String lastname;
-    @Column(name = "email")
     private String email;
     private String phone;
 
