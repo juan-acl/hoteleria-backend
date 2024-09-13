@@ -15,10 +15,11 @@ public class UserModel {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "id_user", nullable = false)
-    private Long id;
+    private Long id_user;
 
     private String name;
     private String lastname;
+    @Column(name = "email")
     private String email;
     private String phone;
 
