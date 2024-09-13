@@ -3,7 +3,9 @@ package com.hoteleria_app.hoteleria_app;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
+
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.hoteleria_app.hoteleria_app.dto.EmailDto.EmailResponse;
@@ -16,7 +18,8 @@ public class HoteleriaAppApplication {
 		SpringApplication.run(HoteleriaAppApplication.class, args);
 	}
 
-	@GetMapping("/")
+	@RequestMapping(value = "", method = { RequestMethod.GET, RequestMethod.POST, RequestMethod.PUT,
+			RequestMethod.DELETE })
 	public ResponseEntity<EmailResponse> index() {
 		return ResponseEntity.ok().body(new EmailResponse("Welcome to hoteleria api", 200));
 	}
