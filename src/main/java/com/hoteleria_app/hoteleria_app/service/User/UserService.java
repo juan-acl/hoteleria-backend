@@ -1,5 +1,7 @@
 package com.hoteleria_app.hoteleria_app.service.User;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -13,6 +15,10 @@ public class UserService {
 
     public UserModel findByEmail(String email) {
         return userRepository.findByEmail(email);
+    }
+
+    public List<UserModel> getAllUsers() {
+        return userRepository.findAll();
     }
 
 }

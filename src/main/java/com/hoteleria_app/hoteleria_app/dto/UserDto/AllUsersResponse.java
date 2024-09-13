@@ -9,9 +9,9 @@ import lombok.*;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class UserResponse {
+public class AllUsersResponse {
     private String status;
     private String message;
-    private int count;
-    private UserModel user;
+    private Integer count;
+    private List<UserModel> users;
 }

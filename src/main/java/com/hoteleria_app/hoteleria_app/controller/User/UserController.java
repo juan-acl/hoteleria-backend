@@ -1,9 +1,12 @@
 package com.hoteleria_app.hoteleria_app.controller.User;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import com.hoteleria_app.hoteleria_app.dto.UserDto.AllUsersResponse;
 import com.hoteleria_app.hoteleria_app.dto.UserDto.UserRequest;
 import com.hoteleria_app.hoteleria_app.dto.UserDto.UserResponse;
 import com.hoteleria_app.hoteleria_app.model.User.UserModel;
@@ -29,6 +32,17 @@ public class UserController {
         } catch (Exception e) {
             return ResponseEntity.status(500)
                     .body(new UserResponse("error", "Internal server error: " + e.getMessage(), 0, null));
+        }
+    }
+
+    @PostMapping("/getAllUsers")
+    public ResponseEntity<AllUsersResponse> getAllUsers() {
+        try {
+            List<UserModel> users = userService.getAllUsers();
+            return ResponseEntity.status(200).body(new AllUsersResponse("success", "Users found", users.size(), users));
+        } catch (Exception e) {
+            return ResponseEntity.status(500)
+                    .body(new AllUsersResponse("error", "Internal server error: " + e.getMessage(), 0, null));
         }
     }
 }
