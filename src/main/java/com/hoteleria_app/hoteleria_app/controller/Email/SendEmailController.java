@@ -9,11 +9,11 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.hoteleria_app.hoteleria_app.dto.EmailDto.EmailRequest;
 import com.hoteleria_app.hoteleria_app.dto.EmailDto.EmailResponse;
-import com.hoteleria_app.hoteleria_app.service.EmailService;
+import com.hoteleria_app.hoteleria_app.service.Email.EmailService;
 
 @RestController
 @RequestMapping("/api")
-public class SendEmail {
+public class SendEmailController {
     @Autowired
     private EmailService emailService;
 

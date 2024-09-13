@@ -1,4 +1,4 @@
-package com.hoteleria_app.hoteleria_app.service;
+package com.hoteleria_app.hoteleria_app.service.Email;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.mail.SimpleMailMessage;
