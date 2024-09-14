@@ -13,13 +13,17 @@ import lombok.AllArgsConstructor;
 
 public class UserModel {
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id_user", nullable = false)
     private Long id_user;
 
+    @Column(nullable = false)
     private String name;
+    @Column(nullable = false)
     private String lastname;
+    @Column(nullable = false)
     private String email;
+    @Column(nullable = false)
     private String phone;
 
 }

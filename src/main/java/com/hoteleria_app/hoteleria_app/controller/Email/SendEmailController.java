@@ -21,13 +21,13 @@ public class SendEmailController {
     public ResponseEntity<EmailResponse> sendEmail(@RequestBody EmailRequest emailRequest) {
         try {
             if (emailRequest.getBody() == null || emailRequest.getTo() == null || emailRequest.getSubject() == null) {
-                return ResponseEntity.ok().body(new EmailResponse("All params are required!!", 400));
+                return ResponseEntity.ok().body(new EmailResponse(400, "All params are required!!"));
             }
             emailService.sendEmail(emailRequest.getTo(), emailRequest.getSubject(), emailRequest.getBody());
-            return ResponseEntity.ok().body(new EmailResponse("Email send succesfully", 200));
+            return ResponseEntity.ok().body(new EmailResponse(200, "Email send succesfully"));
         } catch (Exception e) {
             return ResponseEntity.ok()
-                    .body(new EmailResponse("Error on sending email" + e.getMessage() + " " + e.getCause(), 500));
+                    .body(new EmailResponse(500, "Error on sending email" + e.getMessage() + " " + e.getCause()));
         }
     }
 

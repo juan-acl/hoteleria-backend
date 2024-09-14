@@ -21,7 +21,7 @@ public class HoteleriaAppApplication {
 	@RequestMapping(value = "", method = { RequestMethod.GET, RequestMethod.POST, RequestMethod.PUT,
 			RequestMethod.DELETE })
 	public ResponseEntity<EmailResponse> index() {
-		return ResponseEntity.ok().body(new EmailResponse("Welcome to hoteleria api", 200));
+		return ResponseEntity.ok().body(new EmailResponse(200, "Welcome to hoteleria api"));
 	}
 
 }

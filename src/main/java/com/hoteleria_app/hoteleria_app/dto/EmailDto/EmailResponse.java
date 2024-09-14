@@ -6,7 +6,7 @@ import lombok.*;
 @AllArgsConstructor
 @NoArgsConstructor
 public class EmailResponse {
-    private String message;
     private int status;
+    private String message;
 
 }
