@@ -8,6 +8,7 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 import com.hoteleria_app.hoteleria_app.dto.UserDto.AllUsersResponse;
+import com.hoteleria_app.hoteleria_app.dto.UserDto.DeleteUser;
 import com.hoteleria_app.hoteleria_app.dto.UserDto.UserRequest;
 import com.hoteleria_app.hoteleria_app.dto.UserDto.UserRequestCreateUser;
 import com.hoteleria_app.hoteleria_app.dto.UserDto.UserResponse;
@@ -64,7 +65,7 @@ public class UserController {
                         .body(new UserResponse("error", errorMessage.toString(), 0, null));
             }
             UserModel findUser = userService.findByEmail(user.getEmail());
-            System.out.println(findUser);
+            System.out.println("USUARIO ENCONTRADO: " + findUser);
             if (findUser != null) {
                 return ResponseEntity.status(400)
                         .body(new UserResponse("error", "User already exists", 0, null));
@@ -75,6 +76,22 @@ public class UserController {
         } catch (Exception error) {
             return ResponseEntity.status(500)
                     .body(new UserResponse("error", "Internal server error: " + error.getMessage(), 0, null));
+        }
+    }
+
+    @PostMapping("/deleteUser")
+    public ResponseEntity<UserResponse> deleteUser(@RequestBody DeleteUser id) {
+        try {
+            Long idUser = id.getId_user();
+            if (idUser == null) {
+                return ResponseEntity.status(400)
+                        .body(new UserResponse("error", "Id_user is required", 0, null));
+            }
+            userService.deleteUser(idUser);
+            return ResponseEntity.status(200).body(new UserResponse("success", "User deleted successfully", 1, null));
+        } catch (Exception e) {
+            return ResponseEntity.status(500)
+                    .body(new UserResponse("error", "Internal server error: " + e.getMessage(), 0, null));
         }
     }
 }
