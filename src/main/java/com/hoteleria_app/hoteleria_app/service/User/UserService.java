@@ -23,7 +23,6 @@ public class UserService {
     }
 
     public UserModel createUser(UserRequestCreateUser userRequest) {
-        System.out.println(userRequest);
         UserModel userModel = new UserModel();
         userModel.setName(userRequest.getName());
         userModel.setLastname(userRequest.getLastname());

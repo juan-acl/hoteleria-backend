@@ -65,7 +65,6 @@ public class UserController {
                         .body(new UserResponse("error", errorMessage.toString(), 0, null));
             }
             UserModel findUser = userService.findByEmail(user.getEmail());
-            System.out.println("USUARIO ENCONTRADO: " + findUser);
             if (findUser != null) {
                 return ResponseEntity.status(400)
                         .body(new UserResponse("error", "User already exists", 0, null));
@@ -89,6 +88,31 @@ public class UserController {
             }
             userService.deleteUser(idUser);
             return ResponseEntity.status(200).body(new UserResponse("success", "User deleted successfully", 1, null));
+        } catch (Exception e) {
+            return ResponseEntity.status(500)
+                    .body(new UserResponse("error", "Internal server error: " + e.getMessage(), 0, null));
+        }
+    }
+
+    @PostMapping("/updateUser")
+    public ResponseEntity<UserResponse> updateUser(@RequestBody UserModel user) {
+        try {
+            if (user.getId_user() == null) {
+                return ResponseEntity.status(400)
+                        .body(new UserResponse("error", "Id_user is required", 0, null));
+            }
+            UserModel existingUser = userService.findById(user.getId_user());
+            if (existingUser == null) {
+                return ResponseEntity.status(404)
+                        .body(new UserResponse("error", "User not found", 0, null));
+            }
+
+            existingUser.setName(user.getName());
+            existingUser.setLastname(user.getLastname());
+            existingUser.setPhone(user.getPhone());
+            UserModel updatedUser = userService.updateUser(existingUser);
+            return ResponseEntity.status(200)
+                    .body(new UserResponse("success", "User updated successfully", 1, updatedUser));
         } catch (Exception e) {
             return ResponseEntity.status(500)
                     .body(new UserResponse("error", "Internal server error: " + e.getMessage(), 0, null));
