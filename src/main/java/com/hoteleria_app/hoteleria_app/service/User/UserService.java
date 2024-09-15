@@ -13,6 +13,8 @@ import com.hoteleria_app.hoteleria_app.repository.User.UserRepository;
 public class UserService {
     @Autowired
     private UserRepository userRepository;
+    @Autowired
+    private PasswordService passwordService;
 
     public UserModel findByEmail(String email) {
         return userRepository.findByEmail(email);
@@ -28,7 +30,7 @@ public class UserService {
         userModel.setLastname(userRequest.getLastname());
         userModel.setEmail(userRequest.getEmail());
         userModel.setPhone(userRequest.getPhone());
-
+        userModel.setPassword(passwordService.encodePassword(userRequest.getPassword()));
         return userRepository.save(userModel);
     }
 

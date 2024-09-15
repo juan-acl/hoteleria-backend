@@ -17,4 +17,6 @@ public class UserRequestCreateUser {
     private String email;
     @NotEmpty(message = "Phone is required")
     private String phone;
+    @NotEmpty(message = "Password is required")
+    private String password;
 }
