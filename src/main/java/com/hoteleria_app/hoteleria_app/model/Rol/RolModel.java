@@ -4,6 +4,10 @@ import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import java.util.HashSet;
+import java.util.Set;
+
+import com.hoteleria_app.hoteleria_app.model.PermissionRol.PermissionRolModel;
 
 @Entity
 @Data
@@ -18,4 +22,7 @@ public class RolModel {
 
     @Column(nullable = false)
     private String name;
+
+    @OneToMany(mappedBy = "rol")
+    private Set<PermissionRolModel> rolePermissions = new HashSet<>();
 }

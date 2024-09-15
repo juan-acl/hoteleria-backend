@@ -17,8 +17,8 @@ public class Securityconfig {
         http
                 .csrf().disable() // Desactivar CSRF temporalmente (activar en producción)
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/api/login", "/api/register").permitAll() // Permitir acceso público al login
-                                                                                    // y registro
+                        .requestMatchers("/api/login").permitAll() // Permitir acceso público al login
+                                                                   // y registro
                         .anyRequest().authenticated() // Proteger las demás rutas
                 )
                 .formLogin()

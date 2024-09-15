@@ -1,6 +1,11 @@
 package com.hoteleria_app.hoteleria_app.model.Permission;
 
 import jakarta.persistence.*;
+import java.util.HashSet;
+import java.util.Set;
+
+import com.hoteleria_app.hoteleria_app.model.PermissionRol.PermissionRolModel;
+
 import lombok.*;
 
 @Entity
@@ -16,4 +21,7 @@ public class PermissionModel {
 
     @Column(nullable = false)
     private String name;
+
+    @OneToMany(mappedBy = "permission")
+    private Set<PermissionRolModel> permissionRoles = new HashSet<>();
 }
