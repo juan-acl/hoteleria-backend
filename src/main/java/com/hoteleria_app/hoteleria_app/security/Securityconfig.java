@@ -9,18 +9,19 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 
+import com.hoteleria_app.hoteleria_app.service.User.CustomUserDetailsService;
+
 @Configuration
-public class Securityconfig {
+public class SecurityConfig {
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
                 .csrf().disable() // Desactivar CSRF temporalmente (activar en producción)
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/api/login").permitAll() // Permitir acceso público al login
-                                                                   // y registro
-                        .anyRequest().authenticated() // Proteger las demás rutas
-                )
+                        // .requestMatchers("/api/login", "/api/user/createUser").permitAll()
+                        .requestMatchers("/api/**").permitAll()
+                        .anyRequest().authenticated())
                 .formLogin()
                 .usernameParameter("email") // Cambiar el nombre del campo de usuario a "email"
                 .passwordParameter("password") // Cambiar el nombre del campo de contraseña
@@ -38,5 +39,10 @@ public class Securityconfig {
     @Bean
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
+    }
+
+    @Bean
+    public CustomUserDetailsService customUserDetailsService() {
+        return new CustomUserDetailsService();
     }
 }

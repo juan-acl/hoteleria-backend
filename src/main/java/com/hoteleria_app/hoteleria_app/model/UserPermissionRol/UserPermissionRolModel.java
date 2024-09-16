@@ -14,7 +14,7 @@ import lombok.*;
 public class UserPermissionRolModel {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id_user_permission_rol", nullable = false)
+    @Column(name = "id_user_permission_rol")
     private Long id_user_permission_rol;
 
     @ManyToOne

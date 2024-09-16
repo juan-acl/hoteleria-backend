@@ -18,7 +18,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 
 @RestController
 @RequestMapping("/api")
-public class Login {
+public class LoginController {
     @Autowired
     private AuthenticationManager authenticationManager;
 
@@ -34,7 +34,7 @@ public class Login {
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
                     .body(new LoginResponse(HttpStatus.UNAUTHORIZED.value(),
-                            "Invalid username or password"));
+                            "Invalid username or password" + e.getMessage()));
         }
     }
 }
