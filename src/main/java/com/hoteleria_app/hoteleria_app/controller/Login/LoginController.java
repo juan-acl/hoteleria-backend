@@ -15,7 +15,7 @@ import com.hoteleria_app.hoteleria_app.service.Auth.AuthenticationService;
 import com.hoteleria_app.hoteleria_app.utils.JwtService;
 
 @RestController
-@RequestMapping("/api")
+@RequestMapping("/api/auth")
 public class LoginController {
 
     @Autowired

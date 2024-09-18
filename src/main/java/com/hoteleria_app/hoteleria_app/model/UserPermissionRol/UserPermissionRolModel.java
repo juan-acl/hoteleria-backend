@@ -18,11 +18,11 @@ public class UserPermissionRolModel {
     private Long id_user_permission_rol;
 
     @ManyToOne
-    @JoinColumn(name = "id_user", nullable = false)
+    @JoinColumn(name = "id_user", nullable = false, referencedColumnName = "id_user")
     private UserModel user;
 
     @ManyToOne
-    @JoinColumn(name = "id_permission_rol", nullable = false)
+    @JoinColumn(name = "id_permission_rol", nullable = false, referencedColumnName = "id_permission_rol")
     private PermissionRolModel permissionRol;
 
 }

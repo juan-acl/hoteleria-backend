@@ -22,6 +22,4 @@ public class PermissionModel {
     @Column(nullable = false)
     private String name;
 
-    @OneToMany(mappedBy = "permission")
-    private Set<PermissionRolModel> permissionRoles = new HashSet<>();
 }

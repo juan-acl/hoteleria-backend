@@ -33,22 +33,18 @@ public class SecurityConfig {
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
-        http
-                .csrf().disable() // Desactivar CSRF temporalmente (activar en producción)
-                .authorizeHttpRequests(auth -> auth
-                        // .requestMatchers("/api/login", "/api/user/createUser").permitAll()
-                        .requestMatchers("/api/**").permitAll()
-                        .anyRequest().authenticated())
-                // .and()
+        http.csrf()
+                .disable()
+                .cors().and() // Habilita CORS
+                .authorizeHttpRequests()
+                .requestMatchers("/api/**").permitAll() // Solo permite rutas de autenticación pública
+                .anyRequest().authenticated() // Autenticación requerida para todo lo demás
+                .and()
                 .sessionManagement()
-                .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+                .sessionCreationPolicy(SessionCreationPolicy.STATELESS) // Sin sesiones
                 .and()
                 .authenticationProvider(authenticationProvider)
-                .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class)
-                .formLogin()
-                .usernameParameter("email") // Cambiar el nombre del campo de usuario a "email"
-                .passwordParameter("password") // Cambiar el nombre del campo de contraseña
-                .permitAll(); // Permitir acceso público al formulario de login
+                .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
 
         return http.build();
     }
@@ -57,7 +53,7 @@ public class SecurityConfig {
     CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration configuration = new CorsConfiguration();
 
-        configuration.setAllowedOrigins(List.of("http://localhost:9090"));
+        configuration.setAllowedOrigins(List.of("http://localhost:9090/"));
         configuration.setAllowedMethods(List.of("GET", "POST"));
         configuration.setAllowedHeaders(List.of("Authorization", "Content-Type"));
 

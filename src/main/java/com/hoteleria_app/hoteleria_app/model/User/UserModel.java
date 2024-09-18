@@ -3,13 +3,10 @@ package com.hoteleria_app.hoteleria_app.model.User;
 import jakarta.persistence.*;
 
 import java.util.Collection;
-import java.util.HashSet;
-import java.util.Set;
-
+import java.util.List;
 import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
-
-import com.hoteleria_app.hoteleria_app.model.UserPermissionRol.UserPermissionRolModel;
 
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -20,7 +17,6 @@ import lombok.AllArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 @Table(name = "user")
-
 public class UserModel implements UserDetails {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -35,23 +31,45 @@ public class UserModel implements UserDetails {
 
     @Column(nullable = false)
     private String email;
+
     @Column(nullable = false)
     private String phone;
 
     @Column(nullable = false)
     private String password;
 
-    @OneToMany(mappedBy = "user")
-    private Set<UserPermissionRolModel> userPermissionRols = new HashSet<>();
-
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return java.util.Collections.emptyList();
+        return List.of(new SimpleGrantedAuthority("ADMIN"));
     }
 
     @Override
     public String getUsername() {
-        return this.name;
+        return this.email;
     }
 
+    @Override
+    public String getPassword() {
+        return this.password;
+    }
+
+    @Override
+    public boolean isAccountNonExpired() {
+        return true;
+    }
+
+    @Override
+    public boolean isAccountNonLocked() {
+        return true;
+    }
+
+    @Override
+    public boolean isCredentialsNonExpired() {
+        return true;
+    }
+
+    @Override
+    public boolean isEnabled() {
+        return true;
+    }
 }

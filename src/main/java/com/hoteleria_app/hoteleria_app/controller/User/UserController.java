@@ -4,6 +4,9 @@ import java.util.*;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.Authentication;
+
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
@@ -113,6 +116,18 @@ public class UserController {
             UserModel updatedUser = userService.updateUser(existingUser);
             return ResponseEntity.status(200)
                     .body(new UserResponse("success", "User updated successfully", 1, updatedUser));
+        } catch (Exception e) {
+            return ResponseEntity.status(500)
+                    .body(new UserResponse("error", "Internal server error: " + e.getMessage(), 0, null));
+        }
+    }
+
+    @PostMapping("/me")
+    public ResponseEntity<UserResponse> getMe() {
+        try {
+            Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+            UserModel me = (UserModel) authentication.getPrincipal();
+            return ResponseEntity.status(200).body(new UserResponse("success", "User found", 1, me));
         } catch (Exception e) {
             return ResponseEntity.status(500)
                     .body(new UserResponse("error", "Internal server error: " + e.getMessage(), 0, null));
