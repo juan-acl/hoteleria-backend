@@ -1,11 +1,13 @@
 package com.hoteleria_app.hoteleria_app.service.User;
 
 import java.util.List;
+import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.hoteleria_app.hoteleria_app.dto.UserDto.UserRequestCreateUser;
+import com.hoteleria_app.hoteleria_app.model.Permisos.PermisosModel;
 import com.hoteleria_app.hoteleria_app.model.User.UserModel;
 import com.hoteleria_app.hoteleria_app.repository.User.UserRepository;
 
@@ -44,6 +46,10 @@ public class UserService {
 
     public UserModel findById(Long id) {
         return userRepository.findById(id).orElse(null);
+    }
+
+    public Set<PermisosModel> findByIdWithPermissions(Long id) {
+        return userRepository.findPermisosByUserId(id);
     }
 
 }

@@ -2,7 +2,6 @@ package com.hoteleria_app.hoteleria_app.model.Permisos;
 
 import com.hoteleria_app.hoteleria_app.model.User.UserModel;
 
-import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
@@ -43,7 +42,7 @@ public class PermisosModel {
     @Column(nullable = false)
     private int report;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "id_user", nullable = false)
     private UserModel user;
 
