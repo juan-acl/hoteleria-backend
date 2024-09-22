@@ -1,9 +1,6 @@
 package com.hoteleria_app.hoteleria_app.controller.User;
 
 import java.util.*;
-import java.util.stream.Collectors;
-
-import org.hibernate.Hibernate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -11,8 +8,6 @@ import org.springframework.security.core.Authentication;
 
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
-
-import com.hoteleria_app.hoteleria_app.dto.PermisosDto.PermisosDto;
 import com.hoteleria_app.hoteleria_app.dto.UserDto.AllUsersResponse;
 import com.hoteleria_app.hoteleria_app.dto.UserDto.DeleteUser;
 import com.hoteleria_app.hoteleria_app.dto.UserDto.UserRequest;
