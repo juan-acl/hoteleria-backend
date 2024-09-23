@@ -37,7 +37,7 @@ public class SecurityConfig {
                 .disable()
                 .cors().and() // Habilita CORS
                 .authorizeHttpRequests()
-                .requestMatchers("/api/**").permitAll() // Solo permite rutas de autenticación pública
+                .requestMatchers("/", "/api/auth/**").permitAll() // Solo permite rutas de autenticación pública
                 .anyRequest().authenticated() // Autenticación requerida para todo lo demás
                 .and()
                 .sessionManagement()
@@ -65,7 +65,7 @@ public class SecurityConfig {
     }
 
     @Bean
-    public CustomUserDetailsService customUserDetailsService() {
+    CustomUserDetailsService customUserDetailsService() {
         return new CustomUserDetailsService();
     }
 }

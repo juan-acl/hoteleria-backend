@@ -6,7 +6,6 @@ import java.util.Set;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.hoteleria_app.hoteleria_app.dto.UserDto.UserRequestCreateUser;
 import com.hoteleria_app.hoteleria_app.model.Permisos.PermisosModel;
 import com.hoteleria_app.hoteleria_app.model.User.UserModel;
 import com.hoteleria_app.hoteleria_app.repository.User.UserRepository;
@@ -15,8 +14,6 @@ import com.hoteleria_app.hoteleria_app.repository.User.UserRepository;
 public class UserService {
     @Autowired
     private UserRepository userRepository;
-    @Autowired
-    private PasswordService passwordService;
 
     public UserModel findByEmail(String email) {
         return userRepository.findByEmail(email);
@@ -24,16 +21,6 @@ public class UserService {
 
     public List<UserModel> getAllUsers() {
         return userRepository.findAll();
-    }
-
-    public UserModel createUser(UserRequestCreateUser userRequest) {
-        UserModel userModel = new UserModel();
-        userModel.setName(userRequest.getName());
-        userModel.setLastname(userRequest.getLastname());
-        userModel.setEmail(userRequest.getEmail());
-        userModel.setPhone(userRequest.getPhone());
-        userModel.setPassword(passwordService.encodePassword(userRequest.getPassword()));
-        return userRepository.save(userModel);
     }
 
     public UserModel updateUser(UserModel user) {
