@@ -1,7 +1,7 @@
 package com.hoteleria_app.hoteleria_app.model.User;
 
 import com.hoteleria_app.hoteleria_app.model.Access.AccessModel;
-import com.hoteleria_app.hoteleria_app.model.Permissions.PermissionsModel;
+import com.hoteleria_app.hoteleria_app.model.Permission.PermissionModel;
 import com.hoteleria_app.hoteleria_app.model.Reservation.ReservationModel;
 import jakarta.persistence.*;
 
@@ -48,7 +48,7 @@ public class UserModel implements UserDetails {
     private Set<AccessModel> accesses = new LinkedHashSet<>();
 
     @OneToMany(fetch = FetchType.EAGER, mappedBy = "user")
-    private Set<PermissionsModel> permisos = new LinkedHashSet<>();
+    private Set<PermissionModel> permisos = new LinkedHashSet<>();
 
     @OneToMany(fetch = FetchType.EAGER, mappedBy = "idUser")
     private Set<ReservationModel> reservations = new LinkedHashSet<>();

@@ -12,7 +12,7 @@ import com.hoteleria_app.hoteleria_app.dto.UserDto.DeleteUser;
 import com.hoteleria_app.hoteleria_app.dto.UserDto.UserRequest;
 import com.hoteleria_app.hoteleria_app.dto.UserDto.UserResponse;
 import com.hoteleria_app.hoteleria_app.dto.UserDto.UserResponseDto;
-import com.hoteleria_app.hoteleria_app.model.Permissions.PermissionsModel;
+import com.hoteleria_app.hoteleria_app.model.Permission.PermissionModel;
 import com.hoteleria_app.hoteleria_app.model.User.UserModel;
 import com.hoteleria_app.hoteleria_app.service.User.UserService;
 
@@ -96,7 +96,7 @@ public class UserController {
         try {
             Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
             UserModel me = (UserModel) authentication.getPrincipal();
-            Set<PermissionsModel> permisos = userService.findByIdWithPermissions(me.getId_user());
+            Set<PermissionModel> permisos = userService.findByIdWithPermissions(me.getId_user());
             me.setPermisos(permisos);
             return ResponseEntity.status(200)
                     .body(new UserResponseDto("success", "User found", 1, me.getPermisos()));

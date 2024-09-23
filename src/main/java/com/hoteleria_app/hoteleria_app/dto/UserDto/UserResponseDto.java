@@ -2,7 +2,7 @@ package com.hoteleria_app.hoteleria_app.dto.UserDto;
 
 import java.util.Set;
 
-import com.hoteleria_app.hoteleria_app.model.Permissions.PermissionsModel;
+import com.hoteleria_app.hoteleria_app.model.Permission.PermissionModel;
 
 import lombok.*;
 
@@ -13,5 +13,5 @@ public class UserResponseDto {
     private String status;
     private String message;
     private int count;
-    private Set<PermissionsModel> currentUser;
+    private Set<PermissionModel> currentUser;
 }
