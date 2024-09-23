@@ -1,5 +1,6 @@
 package com.hoteleria_app.hoteleria_app.model.User;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.hoteleria_app.hoteleria_app.model.Access.AccessModel;
 import com.hoteleria_app.hoteleria_app.model.Permission.PermissionModel;
 import com.hoteleria_app.hoteleria_app.model.Reservation.ReservationModel;
@@ -47,15 +48,18 @@ public class UserModel implements UserDetails {
     @OneToMany(fetch = FetchType.EAGER, mappedBy = "idUser")
     private Set<AccessModel> accesses = new LinkedHashSet<>();
 
+    // El @JsonManagedReference se coloca en el modelo padre y solo va a mostrar
+    // los datos que no tienen un @JsonBackReference
+    @JsonManagedReference
     @OneToMany(fetch = FetchType.EAGER, mappedBy = "user")
-    private Set<PermissionModel> permisos = new LinkedHashSet<>();
+    private Set<PermissionModel> permissions = new LinkedHashSet<>();
 
     @OneToMany(fetch = FetchType.EAGER, mappedBy = "idUser")
     private Set<ReservationModel> reservations = new LinkedHashSet<>();
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return this.permisos.stream()
+        return this.permissions.stream()
                 .map(permiso -> new SimpleGrantedAuthority(permiso.getName()))
                 .collect(Collectors.toList());
     }

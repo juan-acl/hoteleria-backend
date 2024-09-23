@@ -12,6 +12,7 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import lombok.*;
+import com.fasterxml.jackson.annotation.JsonBackReference;
 
 @Entity
 @Data
@@ -42,6 +43,9 @@ public class PermissionModel {
     @Column(nullable = false)
     private int report;
 
+    // El @JsonBackReference se coloca en el modelo hijo para evitar la recursividad
+    // infinita esto no lo va a mostrar en la respuesta
+    @JsonBackReference
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "id_user", nullable = false)
     private UserModel user;

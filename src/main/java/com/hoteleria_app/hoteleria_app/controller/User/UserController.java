@@ -97,7 +97,7 @@ public class UserController {
             Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
             UserModel me = (UserModel) authentication.getPrincipal();
             Set<PermissionModel> permissions = userService.findByIdWithPermissions(me.getId_user());
-            me.setPermisos(permissions);
+            me.setPermissions(permissions);
             return ResponseEntity.status(200)
                     .body(new UserResponseDto("success", "User found", 1, me));
         } catch (Exception e) {
