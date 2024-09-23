@@ -18,8 +18,7 @@ public class HoteleriaAppApplication {
 		SpringApplication.run(HoteleriaAppApplication.class, args);
 	}
 
-	@RequestMapping(value = "", method = { RequestMethod.GET, RequestMethod.POST, RequestMethod.PUT,
-			RequestMethod.DELETE })
+	@RequestMapping(value = "", method = { RequestMethod.GET, RequestMethod.POST })
 	public ResponseEntity<EmailResponse> index() {
 		return ResponseEntity.ok().body(new EmailResponse(200, "Welcome to hoteleria api"));
 	}

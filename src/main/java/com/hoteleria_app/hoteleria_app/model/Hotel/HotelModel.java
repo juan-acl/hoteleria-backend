@@ -20,7 +20,7 @@ public class HotelModel {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id_hotel", nullable = false)
-    private Integer id;
+    private Long id_hotel;
 
     @Size(max = 100)
     @NotNull
