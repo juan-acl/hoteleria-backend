@@ -96,10 +96,10 @@ public class UserController {
         try {
             Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
             UserModel me = (UserModel) authentication.getPrincipal();
-            Set<PermissionModel> permisos = userService.findByIdWithPermissions(me.getId_user());
-            me.setPermisos(permisos);
+            Set<PermissionModel> permissions = userService.findByIdWithPermissions(me.getId_user());
+            me.setPermisos(permissions);
             return ResponseEntity.status(200)
-                    .body(new UserResponseDto("success", "User found", 1, me.getPermisos()));
+                    .body(new UserResponseDto("success", "User found", 1, me));
         } catch (Exception e) {
             return ResponseEntity.status(500)
                     .body(new UserResponseDto("error", "Internal server error: " + e.getMessage(), 0, null));
