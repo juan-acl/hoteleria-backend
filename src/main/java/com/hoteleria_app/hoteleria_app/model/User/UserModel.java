@@ -1,9 +1,8 @@
 package com.hoteleria_app.hoteleria_app.model.User;
 
 import com.hoteleria_app.hoteleria_app.model.Access.AccessModel;
-import com.hoteleria_app.hoteleria_app.model.Permisos.PermisosModel;
+import com.hoteleria_app.hoteleria_app.model.Permissions.PermissionsModel;
 import com.hoteleria_app.hoteleria_app.model.Reservation.ReservationModel;
-import com.hoteleria_app.hoteleria_app.model.UserPermissionRol.UserPermissionRolModel;
 import jakarta.persistence.*;
 
 import java.util.Collection;
@@ -49,13 +48,10 @@ public class UserModel implements UserDetails {
     private Set<AccessModel> accesses = new LinkedHashSet<>();
 
     @OneToMany(fetch = FetchType.EAGER, mappedBy = "user")
-    private Set<PermisosModel> permisos = new LinkedHashSet<>();
+    private Set<PermissionsModel> permisos = new LinkedHashSet<>();
 
     @OneToMany(fetch = FetchType.EAGER, mappedBy = "idUser")
     private Set<ReservationModel> reservations = new LinkedHashSet<>();
-
-    @OneToMany(fetch = FetchType.EAGER, mappedBy = "user")
-    private Set<UserPermissionRolModel> userPermissionRols = new LinkedHashSet<>();
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {

@@ -1,4 +1,4 @@
-package com.hoteleria_app.hoteleria_app.model.Permisos;
+package com.hoteleria_app.hoteleria_app.model.Permissions;
 
 import com.hoteleria_app.hoteleria_app.model.User.UserModel;
 
@@ -18,7 +18,7 @@ import lombok.*;
 @NoArgsConstructor
 @AllArgsConstructor
 @Table(name = "permisos")
-public class PermisosModel {
+public class PermissionsModel {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id_permiso", nullable = false)
