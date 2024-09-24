@@ -10,7 +10,7 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class GetAllHotelDto {
+public class ResponseGetAllHotelDto {
     private int status;
     private String message;
     private int count;

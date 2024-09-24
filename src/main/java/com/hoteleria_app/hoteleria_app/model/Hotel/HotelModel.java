@@ -42,9 +42,17 @@ public class HotelModel {
     @Column(name = "phone", nullable = false, length = 10)
     private String phone;
 
+    @Size(max = 500)
+    @Column(name = "description", length = 500)
+    private String description;
+
     @NotNull
     @Column(name = "rating", nullable = false)
     private Float rating;
+
+    @NotNull
+    @Column(name = "status", nullable = false)
+    private Integer status;
 
     @OneToMany(mappedBy = "idHotel")
     private Set<AccessModel> accesses = new LinkedHashSet<>();

@@ -26,16 +26,19 @@ public class UserController {
     public ResponseEntity<UserResponse> getUserByEmail(@RequestBody UserRequest email) {
         try {
             if (email.getEmail() == null || email.getEmail().isEmpty()) {
-                return ResponseEntity.status(300).body(new UserResponse("error", "All params are required!!", 0, null));
+                return ResponseEntity.status(300)
+                        .body(new UserResponse("error", "All params are required!!", 0, null));
             }
             UserModel findUser = userService.findByEmail(email.getEmail());
             if (findUser == null) {
-                return ResponseEntity.status(404).body(new UserResponse("error", "User not found", 0, null));
+                return ResponseEntity.status(404)
+                        .body(new UserResponse("error", "User not found", 0, null));
             }
-            return ResponseEntity.status(200).body(new UserResponse("success", "User found", 1, findUser));
+            return ResponseEntity.status(200)
+                    .body(new UserResponse("success", "User found", 1, findUser));
         } catch (Exception e) {
-            return ResponseEntity.status(500)
-                    .body(new UserResponse("error", "Internal server error: " + e.getMessage(), 0, null));
+            return ResponseEntity.status(500).body(
+                    new UserResponse("error", "Internal server error: " + e.getMessage(), 0, null));
         }
     }
 
@@ -43,10 +46,11 @@ public class UserController {
     public ResponseEntity<AllUsersResponse> getAllUsers() {
         try {
             List<UserModel> users = userService.getAllUsers();
-            return ResponseEntity.status(200).body(new AllUsersResponse("success", "Users found", users.size(), users));
+            return ResponseEntity.status(200)
+                    .body(new AllUsersResponse("success", "Users found", users.size(), users));
         } catch (Exception e) {
-            return ResponseEntity.status(500)
-                    .body(new AllUsersResponse("error", "Internal server error: " + e.getMessage(), 0, null));
+            return ResponseEntity.status(500).body(new AllUsersResponse("error",
+                    "Internal server error: " + e.getMessage(), 0, null));
         }
     }
 
@@ -59,10 +63,11 @@ public class UserController {
                         .body(new UserResponse("error", "Id_user is required", 0, null));
             }
             userService.deleteUser(idUser);
-            return ResponseEntity.status(200).body(new UserResponse("success", "User deleted successfully", 1, null));
+            return ResponseEntity.status(200)
+                    .body(new UserResponse("success", "User deleted successfully", 1, null));
         } catch (Exception e) {
-            return ResponseEntity.status(500)
-                    .body(new UserResponse("error", "Internal server error: " + e.getMessage(), 0, null));
+            return ResponseEntity.status(500).body(
+                    new UserResponse("error", "Internal server error: " + e.getMessage(), 0, null));
         }
     }
 
@@ -86,8 +91,8 @@ public class UserController {
             return ResponseEntity.status(200)
                     .body(new UserResponse("success", "User updated successfully", 1, updatedUser));
         } catch (Exception e) {
-            return ResponseEntity.status(500)
-                    .body(new UserResponse("error", "Internal server error: " + e.getMessage(), 0, null));
+            return ResponseEntity.status(500).body(
+                    new UserResponse("error", "Internal server error: " + e.getMessage(), 0, null));
         }
     }
 
@@ -101,8 +106,8 @@ public class UserController {
             return ResponseEntity.status(200)
                     .body(new UserResponseDto("success", "User found", 1, me));
         } catch (Exception e) {
-            return ResponseEntity.status(500)
-                    .body(new UserResponseDto("error", "Internal server error: " + e.getMessage(), 0, null));
+            return ResponseEntity.status(500).body(new UserResponseDto("error",
+                    "Internal server error: " + e.getMessage(), 0, null));
         }
     }
 }
