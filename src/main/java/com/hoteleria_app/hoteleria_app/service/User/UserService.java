@@ -5,7 +5,7 @@ import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
+import com.hoteleria_app.hoteleria_app.model.Access.AccessModel;
 import com.hoteleria_app.hoteleria_app.model.Permission.PermissionModel;
 import com.hoteleria_app.hoteleria_app.model.User.UserModel;
 import com.hoteleria_app.hoteleria_app.repository.User.UserRepository;
@@ -37,6 +37,10 @@ public class UserService {
 
     public Set<PermissionModel> findByIdWithPermissions(Long id) {
         return userRepository.findPermisosByUserId(id);
+    }
+
+    public Set<AccessModel> findAccessByUserId(Long id) {
+        return userRepository.findAccessByUserId(id);
     }
 
 }

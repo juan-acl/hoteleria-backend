@@ -7,14 +7,18 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.Authentication;
 
 import org.springframework.web.bind.annotation.*;
+import com.hoteleria_app.hoteleria_app.dto.Access.RequestAccessDto;
+import com.hoteleria_app.hoteleria_app.dto.Access.ResponseAccessDto;
 import com.hoteleria_app.hoteleria_app.dto.UserDto.AllUsersResponse;
 import com.hoteleria_app.hoteleria_app.dto.UserDto.DeleteUser;
 import com.hoteleria_app.hoteleria_app.dto.UserDto.UserRequest;
 import com.hoteleria_app.hoteleria_app.dto.UserDto.UserResponse;
 import com.hoteleria_app.hoteleria_app.dto.UserDto.UserResponseDto;
+import com.hoteleria_app.hoteleria_app.model.Access.AccessModel;
 import com.hoteleria_app.hoteleria_app.model.Permission.PermissionModel;
 import com.hoteleria_app.hoteleria_app.model.User.UserModel;
 import com.hoteleria_app.hoteleria_app.service.User.UserService;
+
 
 @RestController
 @RequestMapping("/api/user")
@@ -93,6 +97,20 @@ public class UserController {
         } catch (Exception e) {
             return ResponseEntity.status(500).body(
                     new UserResponse("error", "Internal server error: " + e.getMessage(), 0, null));
+        }
+    }
+
+    @PostMapping("/getAccessByUserId")
+    public ResponseEntity<ResponseAccessDto> getAccessByUserId(
+            @RequestBody RequestAccessDto requestAccessDto) {
+        try {
+            Long id_user = requestAccessDto.getId_user();
+            Set<AccessModel> access = userService.findAccessByUserId(id_user);
+            return ResponseEntity.status(200)
+                    .body(new ResponseAccessDto("success", "Access found", 1, access));
+        } catch (Exception e) {
+            return ResponseEntity.status(500).body(new ResponseAccessDto("error",
+                    "Internal server error: " + e.getMessage(), 0, null));
         }
     }
 
