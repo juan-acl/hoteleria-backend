@@ -2,7 +2,7 @@ package com.hoteleria_app.hoteleria_app.controller.Hotel;
 
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import java.util.*;
+import java.util.List;
 import com.hoteleria_app.hoteleria_app.dto.HotelDto.RequestCreateHotelDto;
 import com.hoteleria_app.hoteleria_app.dto.HotelDto.RequestGetHotelByIdDto;
 import com.hoteleria_app.hoteleria_app.dto.HotelDto.RequestUpdateHotelDto;
@@ -15,6 +15,7 @@ import com.hoteleria_app.hoteleria_app.service.Hotel.HotelService;
 import jakarta.validation.Valid;
 
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -29,6 +30,7 @@ public class HotelController {
     }
 
     @PostMapping("/getAllHotels")
+    @PreAuthorize("hasAuthority('ADMIN')")
     public ResponseGetAllHotelDto getAllHotels() {
         try {
             List<HotelModel> hotels = hotelService.getAllHotels();

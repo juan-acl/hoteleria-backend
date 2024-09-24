@@ -6,7 +6,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
-import java.util.*;
+import java.util.List;
 
 import com.hoteleria_app.hoteleria_app.model.Hotel.HotelModel;
 

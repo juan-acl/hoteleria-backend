@@ -8,7 +8,8 @@ import lombok.Setter;
 
 import java.util.LinkedHashSet;
 import java.util.Set;
-
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.hoteleria_app.hoteleria_app.model.Access.AccessModel;
 import com.hoteleria_app.hoteleria_app.model.Room.RoomModel;
 
@@ -54,9 +55,11 @@ public class HotelModel {
     @Column(name = "status", nullable = false)
     private Integer status;
 
+    @JsonBackReference
     @OneToMany(mappedBy = "idHotel")
     private Set<AccessModel> accesses = new LinkedHashSet<>();
 
+    @JsonBackReference
     @OneToMany(mappedBy = "idHotel")
     private Set<RoomModel> rooms = new LinkedHashSet<>();
 
