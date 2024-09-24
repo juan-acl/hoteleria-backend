@@ -4,6 +4,7 @@ import java.util.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.validation.BindingResult;
 import org.springframework.security.core.Authentication;
 
 import org.springframework.web.bind.annotation.*;
@@ -18,6 +19,7 @@ import com.hoteleria_app.hoteleria_app.model.Access.AccessModel;
 import com.hoteleria_app.hoteleria_app.model.Permission.PermissionModel;
 import com.hoteleria_app.hoteleria_app.model.User.UserModel;
 import com.hoteleria_app.hoteleria_app.service.User.UserService;
+import jakarta.validation.Valid;
 
 
 @RestController
@@ -102,8 +104,16 @@ public class UserController {
 
     @PostMapping("/getAccessByUserId")
     public ResponseEntity<ResponseAccessDto> getAccessByUserId(
-            @RequestBody RequestAccessDto requestAccessDto) {
+            @RequestBody @Valid RequestAccessDto requestAccessDto, BindingResult bindingResult) {
         try {
+            if (bindingResult.hasErrors()) {
+                StringBuilder errorMessage = new StringBuilder();
+                bindingResult.getAllErrors().forEach(error -> {
+                    errorMessage.append(error.getDefaultMessage()).append("; ");
+                });
+                return ResponseEntity.status(400)
+                        .body(new ResponseAccessDto("error", errorMessage.toString(), 0, null));
+            }
             Long id_user = requestAccessDto.getId_user();
             Set<AccessModel> access = userService.findAccessByUserId(id_user);
             return ResponseEntity.status(200)
