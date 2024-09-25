@@ -14,6 +14,7 @@ import java.util.function.Function;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
+import com.hoteleria_app.hoteleria_app.model.User.UserModel;
 
 @Service
 public class JwtService {
@@ -29,7 +30,8 @@ public class JwtService {
 
     public Long extractUserId(String token) {
         final Claims claims = extractAllClaims(token);
-        return claims.get("id_user", Long.class);
+        Long id_user = claims.get("id_user", Long.class);
+        return id_user;
     }
 
     public <T> T extractClaim(String token, Function<Claims, T> claimsResolver) {
@@ -42,6 +44,8 @@ public class JwtService {
     }
 
     public String generateToken(Map<String, Object> extraClaims, UserDetails userDetails) {
+        UserModel user = (UserModel) userDetails;
+        extraClaims.put("id_user", user.getId_user());
         return buildToken(extraClaims, userDetails, jwtExpiration);
     }
 
@@ -49,18 +53,12 @@ public class JwtService {
         return jwtExpiration;
     }
 
-    private String buildToken(
-            Map<String, Object> extraClaims,
-            UserDetails userDetails,
+    private String buildToken(Map<String, Object> extraClaims, UserDetails userDetails,
             long expiration) {
-        return Jwts
-                .builder()
-                .setClaims(extraClaims)
-                .setSubject(userDetails.getUsername())
+        return Jwts.builder().setClaims(extraClaims).setSubject(userDetails.getUsername())
                 .setIssuedAt(new Date(System.currentTimeMillis()))
                 .setExpiration(new Date(System.currentTimeMillis() + expiration))
-                .signWith(getSignInKey(), SignatureAlgorithm.HS256)
-                .compact();
+                .signWith(getSignInKey(), SignatureAlgorithm.HS256).compact();
     }
 
     public boolean isTokenValid(String token, UserDetails userDetails) {
@@ -77,11 +75,7 @@ public class JwtService {
     }
 
     private Claims extractAllClaims(String token) {
-        return Jwts
-                .parserBuilder()
-                .setSigningKey(getSignInKey())
-                .build()
-                .parseClaimsJws(token)
+        return Jwts.parserBuilder().setSigningKey(getSignInKey()).build().parseClaimsJws(token)
                 .getBody();
     }
 

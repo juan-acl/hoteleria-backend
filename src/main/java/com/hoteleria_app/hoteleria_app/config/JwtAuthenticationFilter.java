@@ -17,7 +17,6 @@ import org.springframework.web.servlet.HandlerExceptionResolver;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import com.hoteleria_app.hoteleria_app.model.Permission.PermissionModel;
-import com.hoteleria_app.hoteleria_app.model.User.UserModel;
 import com.hoteleria_app.hoteleria_app.service.User.UserService;
 import com.hoteleria_app.hoteleria_app.utils.JwtService;
 import java.util.*;
@@ -31,6 +30,9 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
     private final JwtService jwtService;
     private final UserDetailsService userDetailsService;
     private final UserService userService;
+
+    private final Map<String, Authentication> authenticationCache = new HashMap<>();
+    private static final long CACHE_EXPIRATION_MS = 300000; // 5 minutes
 
     public JwtAuthenticationFilter(JwtService jwtService, UserDetailsService userDetailsService,
             HandlerExceptionResolver handlerExceptionResolver, UserService userService) {
@@ -54,28 +56,38 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
         try {
             final String jwt = authHeader.substring(7);
+
+            // Check if authentication is cached
+            Authentication cachedAuth = authenticationCache.get(jwt);
+            if (cachedAuth != null) {
+                SecurityContextHolder.getContext().setAuthentication(cachedAuth);
+                filterChain.doFilter(request, response);
+                return;
+            }
+
             final String userEmail = jwtService.extractUsername(jwt);
-
-            Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-
-            // ! SI EL USUARIO EXISTE Y NO ESTA AUTENTICADO y seateo el contexto de seguridad
-            if (userEmail != null && authentication == null) {
+            if (userEmail != null
+                    && SecurityContextHolder.getContext().getAuthentication() == null) {
                 UserDetails userDetails = this.userDetailsService.loadUserByUsername(userEmail);
-                // ! POR MEDIO DEL EMIAL OBTENGO EL USUARIO
-                UserModel user = userService.findByEmail(userEmail);
-                // ! OBTENGO LOS PERMISOS A PARTIR DEL ID DEL USUARIO
-                Set<PermissionModel> permissions =
-                        userService.findByIdWithPermissions(user.getId_user());
-                // ! CONVIERTO LOS PERMISOS A AUTHORITIES
-                List<GrantedAuthority> authorities = permissions.stream()
-                        .map(permission -> new SimpleGrantedAuthority(permission.getName()))
-                        .collect(Collectors.toList());
-
                 if (jwtService.isTokenValid(jwt, userDetails)) {
+                    final Long id_user = jwtService.extractUserId(jwt);
+
+                    Set<PermissionModel> permissions = userService.findByIdWithPermissions(id_user);
+                    List<GrantedAuthority> authorities = permissions.stream()
+                            .map(permission -> new SimpleGrantedAuthority(permission.getName()))
+                            .collect(Collectors.toList());
+
                     UsernamePasswordAuthenticationToken authToken =
                             new UsernamePasswordAuthenticationToken(userDetails, null, authorities);
                     authToken
                             .setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
+
+                    // Cache the authentication
+                    authenticationCache.put(jwt, authToken);
+
+                    // Schedule cache cleanup
+                    scheduleCacheCleanup(jwt);
+
                     SecurityContextHolder.getContext().setAuthentication(authToken);
                 }
             }
@@ -85,4 +97,12 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         }
     }
 
+    private void scheduleCacheCleanup(String jwt) {
+        new Timer().schedule(new TimerTask() {
+            @Override
+            public void run() {
+                authenticationCache.remove(jwt);
+            }
+        }, CACHE_EXPIRATION_MS);
+    }
 }

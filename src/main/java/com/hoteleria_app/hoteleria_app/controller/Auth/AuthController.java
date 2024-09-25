@@ -40,11 +40,13 @@ public class AuthController {
         try {
             UserModel userAuth = authenticationService.authenticate(email, password);
             String jwtToken = jwtService.generateToken(userAuth);
-            return ResponseEntity.ok(new LoginResponse(HttpStatus.OK.value(), "Login successful", jwtToken));
+            return ResponseEntity
+                    .ok(new LoginResponse(HttpStatus.OK.value(), "Login successful", jwtToken));
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
                     .body(new LoginResponse(HttpStatus.UNAUTHORIZED.value(),
-                            "Invalid username or password: " + e.getMessage() + " " + e.getCause(), null));
+                            "Invalid username or password: " + e.getMessage() + " " + e.getCause(),
+                            null));
         }
     }
 
@@ -73,8 +75,8 @@ public class AuthController {
                     .body(new UserResponse("success", "User created successfully", 1, newUser));
 
         } catch (Exception error) {
-            return ResponseEntity.status(500)
-                    .body(new UserResponse("error", "Internal server error: " + error.getMessage(), 0, null));
+            return ResponseEntity.status(500).body(new UserResponse("error",
+                    "Internal server error: " + error.getMessage(), 0, null));
         }
     }
 }
