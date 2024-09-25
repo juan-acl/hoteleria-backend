@@ -19,7 +19,7 @@ public class RoomTypeModel {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id_room_type", nullable = false)
-    private Integer id;
+    private Integer id_room_type;
 
     @Size(max = 100)
     @NotNull
