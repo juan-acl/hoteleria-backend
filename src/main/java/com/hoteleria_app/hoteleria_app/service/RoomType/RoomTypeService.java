@@ -13,7 +13,6 @@ public class RoomTypeService {
 
     public RoomTypeService(RoomTypeRepository roomTypeRepository) {
         this.roomTypeRepository = roomTypeRepository;
-
     }
 
     public List<RoomTypeModel> getAllRoomTypes() {
@@ -29,7 +28,11 @@ public class RoomTypeService {
         newRoomType.setName(roomType.getName().trim());
         newRoomType.setDescription(roomType.getDescription().trim());
         newRoomType.setAmenities(roomType.getAmenities().trim());
-        newRoomType.setMaximumPeople(roomType.getMaximumPeople());
+        newRoomType.setMaximumPeople(roomType.getMaximum_people());
         return roomTypeRepository.save(newRoomType);
+    }
+
+    public RoomTypeModel updateRoomType(RoomTypeModel roomTypeModel) {
+        return roomTypeRepository.save(roomTypeModel);
     }
 }

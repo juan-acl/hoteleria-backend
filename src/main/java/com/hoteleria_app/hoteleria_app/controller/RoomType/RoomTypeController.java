@@ -4,6 +4,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import com.hoteleria_app.hoteleria_app.dto.RoomType.RequestCreateRoomTypeDto;
 import com.hoteleria_app.hoteleria_app.dto.RoomType.RequestGetRoomTypeByIdDto;
+import com.hoteleria_app.hoteleria_app.dto.RoomType.RequestUpdateRoomTypeDto;
 import com.hoteleria_app.hoteleria_app.dto.RoomType.ResponseGetAllRoomTypesDto;
 import com.hoteleria_app.hoteleria_app.dto.RoomType.ResponseGetByIdRoomTypeDto;
 import com.hoteleria_app.hoteleria_app.dto.RoomType.ResponseRoomTypeDto;
@@ -86,5 +87,37 @@ public class RoomTypeController {
                     new ResponseRoomTypeDto("error", "Internal server error: " + e.getMessage()));
         }
     }
+
+    @PostMapping("/updateRoomType")
+    public ResponseEntity<ResponseRoomTypeDto> updateRoomType(
+            @RequestBody @Valid RequestUpdateRoomTypeDto roomType, BindingResult bindingResult) {
+        try {
+            if (bindingResult.hasErrors()) {
+                StringBuilder errorMessage = new StringBuilder();
+                bindingResult.getAllErrors().forEach(error -> {
+                    errorMessage.append(error.getDefaultMessage()).append("; ");
+                });
+                return ResponseEntity.status(400)
+                        .body(new ResponseRoomTypeDto("error", errorMessage.toString()));
+            }
+            RoomTypeModel existingRoomType =
+                    roomTypeService.getRoomTypeById(roomType.getId_room_type());
+            if (existingRoomType == null) {
+                return ResponseEntity.status(404)
+                        .body(new ResponseRoomTypeDto("error", "Room type not found"));
+            }
+            existingRoomType.setName(roomType.getName().trim());
+            existingRoomType.setDescription(roomType.getDescription().trim());
+            existingRoomType.setAmenities(roomType.getAmenities().trim());
+            existingRoomType.setMaximumPeople(roomType.getMaximum_people());
+            roomTypeService.updateRoomType(existingRoomType);
+            return ResponseEntity.status(200)
+                    .body(new ResponseRoomTypeDto("success", "Room type updated"));
+        } catch (Exception e) {
+            return ResponseEntity.status(500).body(
+                    new ResponseRoomTypeDto("error", "Internal server error: " + e.getMessage()));
+        }
+    }
+
 
 }
