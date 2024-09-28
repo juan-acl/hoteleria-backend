@@ -24,7 +24,7 @@ public class AccessController {
         this.accessService = accessService;
     }
 
-        @PostMapping("/getAllAccesByIdUser")
+    @PostMapping("/getAllAccesByIdUser")
     public ResponseEntity<ResponseAccessDto> getAllAccesByIdUser(@RequestBody @Valid RequestGetByIdUserDto id_suer, BindingResult bindingResult) {
         try {
             if(bindingResult.hasErrors()) {
