@@ -1,9 +1,6 @@
 package com.hoteleria_app.hoteleria_app.controller.Access;
 
-import com.hoteleria_app.hoteleria_app.dto.Access.RequestAssignmentAccess;
-import com.hoteleria_app.hoteleria_app.dto.Access.RequestGetByIdUserDto;
-import com.hoteleria_app.hoteleria_app.dto.Access.ResponseAccessDto;
-import com.hoteleria_app.hoteleria_app.dto.Access.ResponseAccessHotelDto;
+import com.hoteleria_app.hoteleria_app.dto.Access.*;
 import com.hoteleria_app.hoteleria_app.model.Access.AccessModel;
 import com.hoteleria_app.hoteleria_app.model.Hotel.HotelModel;
 import com.hoteleria_app.hoteleria_app.model.User.UserModel;
@@ -52,7 +49,7 @@ public class AccessController {
     }
 
     @PostMapping("/assignAccessUserByHotel")
-    @PreAuthorize("hasAuthority('ADMINS')")
+    @PreAuthorize("hasAuthority('ADMIN')")
     public ResponseEntity<ResponseAccessDto> createAccessUserByHotel(@RequestBody @Valid RequestAssignmentAccess assignmentUser, BindingResult bindingResult ) {
         try {
             if(bindingResult.hasErrors()) {
@@ -70,6 +67,28 @@ public class AccessController {
             return ResponseEntity.status(500).body(new ResponseAccessDto("success", "Access assigned"));
         }catch(Exception error) {
             return ResponseEntity.status(500).body(new ResponseAccessDto("error", "Error on assignment user: " + error.getMessage()));
+        }
+    }
+
+    @PostMapping("/deleteAccessUserByRole")
+    @PreAuthorize("hasAuthority('ADMIN')")
+    public ResponseEntity<ResponseAccessDto> deleteAccessUserByRole(@RequestBody @Valid RequestDeleteAssignment assignmentUser, BindingResult bindingResult) {
+        try {
+            if(bindingResult.hasErrors()) {
+                StringBuilder error_message = new StringBuilder();
+                bindingResult.getAllErrors().forEach(error -> {
+                    error_message.append(error.getDefaultMessage());
+                });
+                return ResponseEntity.status(400).body(new ResponseAccessDto("error", error_message.toString()));
+            }
+            AccessModel existAccess = accessService.getAccessById(assignmentUser.getId_access());
+            if(existAccess == null) {
+                return ResponseEntity.status(400).body(new ResponseAccessDto("error", "Access not found"));
+            }
+            accessService.deleteAccessByIdUser(assignmentUser.getId_access());
+            return ResponseEntity.status(500).body(new ResponseAccessDto("success", "Access deleted"));
+        }catch(Exception error) {
+            return ResponseEntity.status(500).body(new ResponseAccessDto("error", "Error on delete access: " + error.getMessage()));
         }
     }
 }

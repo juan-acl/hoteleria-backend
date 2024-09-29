@@ -19,4 +19,17 @@ public class AccessService {
     return accessRepository.findAccesByIdUser(id_user);
   }
 
+  public AccessModel getAccessById(Long id_access) {
+    return accessRepository.findById(id_access).orElse(null);
+  }
+
+  public int deleteAccessByIdUser(Long id_user) {
+    try {
+      accessRepository.deleteById(id_user);
+      return 1;
+    }catch (Exception error) {
+      return 0;
+    }
+  }
+
 }
