@@ -14,6 +14,7 @@ import com.fasterxml.jackson.annotation.JsonBackReference;
 @Table(name = "access")
 public class AccessModel {
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id_access", nullable = false)
     private Integer id;
 

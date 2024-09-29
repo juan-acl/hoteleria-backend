@@ -50,7 +50,7 @@ public class AccessController {
 
     @PostMapping("/assignAccessUserByHotel")
     @PreAuthorize("hasAuthority('ADMIN')")
-    public ResponseEntity<ResponseAccessDto> createAccessUserByHotel(@RequestBody @Valid RequestAssignmentAccess assignmentUser, BindingResult bindingResult ) {
+    public ResponseEntity<ResponseAccessDto> createAccessUserByHotel(@RequestBody @Valid RequestAssignmentBatchDto assignmentUser, BindingResult bindingResult ) {
         try {
             if(bindingResult.hasErrors()) {
                 StringBuilder error_message = new StringBuilder();
@@ -59,11 +59,8 @@ public class AccessController {
                 });
                 return ResponseEntity.status(400).body(new ResponseAccessDto("error", error_message.toString()));
             }
-            HotelModel existHotel = hotelService.getHotelById(assignmentUser.getId_hotel());
-            UserModel existUser = userService.findById(assignmentUser.getId_user());
-            if(existUser == null || existHotel == null) {
-                return ResponseEntity.status(400).body(new ResponseAccessDto("error",  "User or hotel not found"));
-            }
+            String success = accessService.assignmentAccessUserByHotel(assignmentUser.getId_hotel(), assignmentUser.getId_user());
+            if(success != "") return ResponseEntity.status(500).body(new ResponseAccessDto("error", "Error on assignment user: " + success));
             return ResponseEntity.status(500).body(new ResponseAccessDto("success", "Access assigned"));
         }catch(Exception error) {
             return ResponseEntity.status(500).body(new ResponseAccessDto("error", "Error on assignment user: " + error.getMessage()));
@@ -85,7 +82,8 @@ public class AccessController {
             if(existAccess == null) {
                 return ResponseEntity.status(400).body(new ResponseAccessDto("error", "Access not found"));
             }
-            accessService.deleteAccessByIdUser(assignmentUser.getId_access());
+            Boolean success = accessService.deleteAccessByIdUser(assignmentUser.getId_access());
+            if(!success) return ResponseEntity.status(500).body(new ResponseAccessDto("error", "Error on delete access"));
             return ResponseEntity.status(500).body(new ResponseAccessDto("success", "Access deleted"));
         }catch(Exception error) {
             return ResponseEntity.status(500).body(new ResponseAccessDto("error", "Error on delete access: " + error.getMessage()));
