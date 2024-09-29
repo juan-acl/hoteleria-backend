@@ -9,7 +9,7 @@ import org.springframework.security.core.Authentication;
 
 import org.springframework.web.bind.annotation.*;
 import com.hoteleria_app.hoteleria_app.dto.Access.RequestAccessDto;
-import com.hoteleria_app.hoteleria_app.dto.Access.ResponseAccessDto;
+import com.hoteleria_app.hoteleria_app.dto.Access.ResponseAccessHotelDto;
 import com.hoteleria_app.hoteleria_app.dto.UserDto.AllUsersResponse;
 import com.hoteleria_app.hoteleria_app.dto.UserDto.DeleteUser;
 import com.hoteleria_app.hoteleria_app.dto.UserDto.UserRequest;
@@ -25,8 +25,11 @@ import jakarta.validation.Valid;
 @RestController
 @RequestMapping("/api/user")
 public class UserController {
-    @Autowired
-    private UserService userService;
+    private final UserService userService;
+
+    public UserController(UserService userService) {
+        this.userService = userService;
+    }
 
     @PostMapping("/getUserByEmail")
     public ResponseEntity<UserResponse> getUserByEmail(@RequestBody UserRequest email) {
@@ -103,7 +106,7 @@ public class UserController {
     }
 
     @PostMapping("/getAccessByUserId")
-    public ResponseEntity<ResponseAccessDto> getAccessByUserId(
+    public ResponseEntity<ResponseAccessHotelDto> getAccessByUserId(
             @RequestBody @Valid RequestAccessDto requestAccessDto, BindingResult bindingResult) {
         try {
             if (bindingResult.hasErrors()) {
@@ -112,14 +115,14 @@ public class UserController {
                     errorMessage.append(error.getDefaultMessage()).append("; ");
                 });
                 return ResponseEntity.status(400)
-                        .body(new ResponseAccessDto("error", errorMessage.toString(), 0, null));
+                        .body(new ResponseAccessHotelDto("error", errorMessage.toString(), 0, null));
             }
             Long id_user = requestAccessDto.getId_user();
             Set<AccessModel> access = userService.findAccessByUserId(id_user);
             return ResponseEntity.status(200)
-                    .body(new ResponseAccessDto("success", "Access found", 1, access));
+                    .body(new ResponseAccessHotelDto("success", "Access found", 1, access));
         } catch (Exception e) {
-            return ResponseEntity.status(500).body(new ResponseAccessDto("error",
+            return ResponseEntity.status(500).body(new ResponseAccessHotelDto("error",
                     "Internal server error: " + e.getMessage(), 0, null));
         }
     }

@@ -1,15 +1,18 @@
 package com.hoteleria_app.hoteleria_app.dto.Access;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import java.util.Set;
 
-@Getter
-@Setter
+import com.hoteleria_app.hoteleria_app.model.Access.AccessModel;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
+@Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class ResponseAccessDto {
+public class ResponseAccessHotelDto {
     private String status;
     private String message;
+    private int count;
+    private Set<AccessModel> access;
 }
