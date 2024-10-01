@@ -2,8 +2,6 @@ package com.hoteleria_app.hoteleria_app.controller.Access;
 
 import com.hoteleria_app.hoteleria_app.dto.Access.*;
 import com.hoteleria_app.hoteleria_app.model.Access.AccessModel;
-import com.hoteleria_app.hoteleria_app.model.Hotel.HotelModel;
-import com.hoteleria_app.hoteleria_app.model.User.UserModel;
 import com.hoteleria_app.hoteleria_app.service.Access.AccessService;
 import com.hoteleria_app.hoteleria_app.service.Hotel.HotelService;
 import com.hoteleria_app.hoteleria_app.service.User.UserService;
