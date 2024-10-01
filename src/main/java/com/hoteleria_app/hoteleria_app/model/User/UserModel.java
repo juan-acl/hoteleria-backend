@@ -37,6 +37,9 @@ public class UserModel implements UserDetails {
     private String lastname;
 
     @Column(nullable = false)
+    private int active;
+
+    @Column(nullable = false)
     private String email;
 
     @Column(nullable = false)
