@@ -32,7 +32,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
     private final UserService userService;
 
     private final Map<String, Authentication> authenticationCache = new HashMap<>();
-    private static final long CACHE_EXPIRATION_MS = 300000; // 5 minutes
+    private static final long CACHE_EXPIRATION_MS = 0; // 5 minutes
 
     public JwtAuthenticationFilter(JwtService jwtService, UserDetailsService userDetailsService,
             HandlerExceptionResolver handlerExceptionResolver, UserService userService) {
@@ -70,15 +70,15 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
                     && SecurityContextHolder.getContext().getAuthentication() == null) {
                 UserDetails userDetails = this.userDetailsService.loadUserByUsername(userEmail);
                 if (jwtService.isTokenValid(jwt, userDetails)) {
-//                    final Long id_user = jwtService.extractUserId(jwt);
+                    final Long id_user = jwtService.extractUserId(jwt);
 
-//                    Set<PermissionModel> permissions = userService.findByIdWithPermissions(id_user);
-//                    List<GrantedAuthority> authorities = permissions.stream()
-//                            .map(permission -> new SimpleGrantedAuthority(permission.getName()))
-//                            .collect(Collectors.toList());
+                    Set<PermissionModel> permissions = userService.findByIdWithPermissions(id_user);
+                    List<GrantedAuthority> authorities = permissions.stream()
+                            .map(permission -> new SimpleGrantedAuthority(permission.getName()))
+                            .collect(Collectors.toList());
 
                     UsernamePasswordAuthenticationToken authToken =
-                            new UsernamePasswordAuthenticationToken(userDetails, null, null);
+                            new UsernamePasswordAuthenticationToken(userDetails, null, authorities);
                     authToken
                             .setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
 

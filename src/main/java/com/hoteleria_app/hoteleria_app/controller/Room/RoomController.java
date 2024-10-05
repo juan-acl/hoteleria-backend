@@ -2,18 +2,14 @@ package com.hoteleria_app.hoteleria_app.controller.Room;
 
 import com.hoteleria_app.hoteleria_app.dto.Room.ResponseRoomDto;
 import com.hoteleria_app.hoteleria_app.dto.Room.ResponseRoomReservedDto;
-import com.hoteleria_app.hoteleria_app.model.Room.RoomModel;
 import com.hoteleria_app.hoteleria_app.repository.Room.RoomRepository;
 import com.hoteleria_app.hoteleria_app.service.Room.RoomService;
 import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import com.hoteleria_app.hoteleria_app.dto.Room.RequestIsReservedDto;
 import org.springframework.web.bind.annotation.RestController;
-
-import java.time.LocalDateTime;
 
 @RestController
 @RequestMapping("/api/room")
@@ -37,11 +33,9 @@ public class RoomController {
                 return ResponseEntity.status(200).body(new ResponseRoomDto("success", "Room is reserved", responseRoomReservedDto));
             }
             responseRoomReservedDto.setIsReserved(false);
-            return ResponseEntity.status(200).body(new ResponseRoomDto("success", "Room is reserved",responseRoomReservedDto));
+            return ResponseEntity.status(200).body(new ResponseRoomDto("success", "Room is not reserved",responseRoomReservedDto));
         } catch (Exception error) {
-            System.out.println("is errorr---------------" + error);
             return ResponseEntity.status(200).body(new ResponseRoomDto("success", "Error",null));
-
         }
     }
 
