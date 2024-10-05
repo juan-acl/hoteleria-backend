@@ -26,6 +26,10 @@ public class RoomModel {
     private Byte available;
 
     @NotNull
+    @Column(name = "active", nullable = false)
+    private Integer active;
+
+    @NotNull
     @Column(name = "price", nullable = false)
     private Float price;
 
