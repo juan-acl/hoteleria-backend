@@ -14,4 +14,9 @@ public class RequestGetHotelByIdDto {
     public void setId_hotel(Long id_hotel) {
         this.id_hotel = id_hotel;
     }
+
+    public Object getId_room() {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'getId_room'");
+    }
 }

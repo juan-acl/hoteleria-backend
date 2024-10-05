@@ -11,12 +11,13 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import com.hoteleria_app.hoteleria_app.dto.Room.RequestIsReservedDto;
 import org.springframework.web.bind.annotation.RestController;
 
+
 @RestController
 @RequestMapping("/api/room")
 public class RoomController {
     private final RoomRepository roomRepository;
     private final RoomService roomService;
-
+    
     public RoomController(RoomRepository roomRepository, RoomService roomService) {
         this.roomRepository = roomRepository;
         this.roomService = roomService;
