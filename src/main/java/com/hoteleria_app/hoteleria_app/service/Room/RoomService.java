@@ -1,6 +1,5 @@
 package com.hoteleria_app.hoteleria_app.service.Room;
 
-import com.hoteleria_app.hoteleria_app.dto.Room.ResponseRoomReservedDto;
 import com.hoteleria_app.hoteleria_app.model.Room.RoomModel;
 import com.hoteleria_app.hoteleria_app.repository.Room.RoomRepository;
 import org.springframework.stereotype.Service;

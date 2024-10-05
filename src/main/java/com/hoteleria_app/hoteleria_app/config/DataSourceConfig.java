@@ -26,14 +26,12 @@ public class DataSourceConfig {
         hikariConfig.setUsername(USERNAME);
         hikariConfig.setPassword(PASSWORD);
 
-        // Configuraciones de pool de conexiones
         hikariConfig.setMinimumIdle(5);
         hikariConfig.setMaximumPoolSize(10);
         hikariConfig.setIdleTimeout(60000);       // 1 minuto
         hikariConfig.setMaxLifetime(1800000);     // 30 minutos
         hikariConfig.setConnectionTimeout(30000); // 30 segundos
         hikariConfig.setPoolName("MiHikari_Hoteleria_CP");
-
         return new HikariDataSource(hikariConfig);
     }
 }
