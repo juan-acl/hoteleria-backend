@@ -5,7 +5,7 @@ import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
 import lombok.Setter;
 
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 import com.hoteleria_app.hoteleria_app.model.Reservation.ReservationModel;
 import com.hoteleria_app.hoteleria_app.model.Room.RoomModel;
@@ -22,11 +22,11 @@ public class ReservationDetailModel {
 
     @NotNull
     @Column(name = "initial_reservation_date", nullable = false)
-    private LocalDate initialReservationDate;
+    private LocalDateTime initialReservationDate;
 
     @NotNull
     @Column(name = "final_reservation_date", nullable = false)
-    private LocalDate finalReservationDate;
+    private LocalDateTime finalReservationDate;
 
     @NotNull
     @Column(name = "price", nullable = false)
