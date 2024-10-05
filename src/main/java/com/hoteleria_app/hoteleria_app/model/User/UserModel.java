@@ -1,9 +1,9 @@
 package com.hoteleria_app.hoteleria_app.model.User;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.hoteleria_app.hoteleria_app.model.Access.AccessModel;
-import com.hoteleria_app.hoteleria_app.model.Permisos.PermisosModel;
+import com.hoteleria_app.hoteleria_app.model.Permission.PermissionModel;
 import com.hoteleria_app.hoteleria_app.model.Reservation.ReservationModel;
-import com.hoteleria_app.hoteleria_app.model.UserPermissionRol.UserPermissionRolModel;
 import jakarta.persistence.*;
 
 import java.util.Collection;
@@ -37,6 +37,9 @@ public class UserModel implements UserDetails {
     private String lastname;
 
     @Column(nullable = false)
+    private int active;
+
+    @Column(nullable = false)
     private String email;
 
     @Column(nullable = false)
@@ -48,18 +51,18 @@ public class UserModel implements UserDetails {
     @OneToMany(fetch = FetchType.EAGER, mappedBy = "idUser")
     private Set<AccessModel> accesses = new LinkedHashSet<>();
 
+    // El @JsonManagedReference se coloca en el modelo padre y solo va a mostrar
+    // los datos que no tienen un @JsonBackReference
+    @JsonManagedReference
     @OneToMany(fetch = FetchType.EAGER, mappedBy = "user")
-    private Set<PermisosModel> permisos = new LinkedHashSet<>();
+    private Set<PermissionModel> permissions = new LinkedHashSet<>();
 
     @OneToMany(fetch = FetchType.EAGER, mappedBy = "idUser")
     private Set<ReservationModel> reservations = new LinkedHashSet<>();
 
-    @OneToMany(fetch = FetchType.EAGER, mappedBy = "user")
-    private Set<UserPermissionRolModel> userPermissionRols = new LinkedHashSet<>();
-
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return this.permisos.stream()
+        return this.permissions.stream()
                 .map(permiso -> new SimpleGrantedAuthority(permiso.getName()))
                 .collect(Collectors.toList());
     }
@@ -72,25 +75,5 @@ public class UserModel implements UserDetails {
     @Override
     public String getPassword() {
         return this.password;
-    }
-
-    @Override
-    public boolean isAccountNonExpired() {
-        return true;
-    }
-
-    @Override
-    public boolean isAccountNonLocked() {
-        return true;
-    }
-
-    @Override
-    public boolean isCredentialsNonExpired() {
-        return true;
-    }
-
-    @Override
-    public boolean isEnabled() {
-        return true;
     }
 }

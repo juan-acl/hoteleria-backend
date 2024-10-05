@@ -14,8 +14,12 @@ import com.hoteleria_app.hoteleria_app.service.Email.EmailService;
 @RestController
 @RequestMapping("/api")
 public class SendEmailController {
-    @Autowired
-    private EmailService emailService;
+
+    private final EmailService emailService;
+
+    public SendEmailController(EmailService emailService) {
+        this.emailService = emailService;
+    }
 
     @PostMapping("/sendEmail")
     public ResponseEntity<EmailResponse> sendEmail(@RequestBody EmailRequest emailRequest) {

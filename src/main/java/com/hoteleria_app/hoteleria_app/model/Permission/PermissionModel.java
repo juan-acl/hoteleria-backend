@@ -1,29 +1,53 @@
 package com.hoteleria_app.hoteleria_app.model.Permission;
 
-import jakarta.persistence.*;
-import java.util.HashSet;
-import java.util.LinkedHashSet;
-import java.util.Set;
+import com.hoteleria_app.hoteleria_app.model.User.UserModel;
 
-import com.hoteleria_app.hoteleria_app.model.PermissionRol.PermissionRolModel;
-
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
+import jakarta.persistence.Table;
 import lombok.*;
+import com.fasterxml.jackson.annotation.JsonBackReference;
 
 @Entity
-@Table(name = "permission")
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
+@Table(name = "permisos")
 public class PermissionModel {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id_permission", nullable = false)
-    private Long id_permission;
+    @Column(name = "id_permiso", nullable = false)
+    private Long id_permiso;
 
     @Column(nullable = false)
     private String name;
 
-    @OneToMany(mappedBy = "idPermission")
-    private Set<PermissionRolModel> permissionRols = new LinkedHashSet<>();
+    @Column(nullable = false)
+    private int delete;
+
+    @Column(nullable = false)
+    private int update;
+
+    @Column(nullable = false)
+    private int create;
+
+    @Column(nullable = false)
+    private int view;
+
+    @Column(nullable = false)
+    private int report;
+
+    // El @JsonBackReference se coloca en el modelo hijo para evitar la recursividad
+    // infinita esto no lo va a mostrar en la respuesta
+    @JsonBackReference
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "id_user", nullable = false)
+    private UserModel user;
 
 }

@@ -7,7 +7,7 @@ import jakarta.validation.constraints.Size;
 import lombok.Getter;
 import lombok.Setter;
 
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 @Getter
 @Setter
@@ -20,7 +20,7 @@ public class ReservationModel {
 
     @NotNull
     @Column(name = "emition_date", nullable = false)
-    private LocalDate emitionDate;
+    private LocalDateTime emitionDate;
 
     @Size(max = 50)
     @NotNull

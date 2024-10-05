@@ -5,18 +5,19 @@ import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
-import com.hoteleria_app.hoteleria_app.dto.UserDto.UserRequestCreateUser;
-import com.hoteleria_app.hoteleria_app.model.Permisos.PermisosModel;
+import com.hoteleria_app.hoteleria_app.model.Access.AccessModel;
+import com.hoteleria_app.hoteleria_app.model.Permission.PermissionModel;
 import com.hoteleria_app.hoteleria_app.model.User.UserModel;
 import com.hoteleria_app.hoteleria_app.repository.User.UserRepository;
 
 @Service
 public class UserService {
-    @Autowired
-    private UserRepository userRepository;
-    @Autowired
-    private PasswordService passwordService;
+
+    private final UserRepository userRepository;
+
+    public UserService(UserRepository userRepository) {
+        this.userRepository = userRepository;
+    }
 
     public UserModel findByEmail(String email) {
         return userRepository.findByEmail(email);
@@ -24,16 +25,6 @@ public class UserService {
 
     public List<UserModel> getAllUsers() {
         return userRepository.findAll();
-    }
-
-    public UserModel createUser(UserRequestCreateUser userRequest) {
-        UserModel userModel = new UserModel();
-        userModel.setName(userRequest.getName());
-        userModel.setLastname(userRequest.getLastname());
-        userModel.setEmail(userRequest.getEmail());
-        userModel.setPhone(userRequest.getPhone());
-        userModel.setPassword(passwordService.encodePassword(userRequest.getPassword()));
-        return userRepository.save(userModel);
     }
 
     public UserModel updateUser(UserModel user) {
@@ -48,8 +39,12 @@ public class UserService {
         return userRepository.findById(id).orElse(null);
     }
 
-    public Set<PermisosModel> findByIdWithPermissions(Long id) {
+    public Set<PermissionModel> findByIdWithPermissions(Long id) {
         return userRepository.findPermisosByUserId(id);
+    }
+
+    public Set<AccessModel> findAccessByUserId(Long id) {
+        return userRepository.findAccessByUserId(id);
     }
 
 }
