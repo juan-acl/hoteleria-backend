@@ -1,8 +1,11 @@
 package com.hoteleria_app.hoteleria_app.service.Room;
 
+import com.hoteleria_app.hoteleria_app.dto.Room.ResponseRoomReservedDto;
 import com.hoteleria_app.hoteleria_app.model.Room.RoomModel;
 import com.hoteleria_app.hoteleria_app.repository.Room.RoomRepository;
 import org.springframework.stereotype.Service;
+
+import java.time.LocalDateTime;
 
 @Service
 public class RoomService {
@@ -29,6 +32,10 @@ public class RoomService {
 
     public RoomModel updateRoom(RoomModel room) {
         return roomRepository.save(room);
+    }
+
+    public Long countReservedRoom(Long id, LocalDateTime initialReservationDate, LocalDateTime finalReservationDate) {
+        return roomRepository.countReservedRoom(id, initialReservationDate, finalReservationDate);
     }
 
 }

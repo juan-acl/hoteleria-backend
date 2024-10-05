@@ -70,15 +70,15 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
                     && SecurityContextHolder.getContext().getAuthentication() == null) {
                 UserDetails userDetails = this.userDetailsService.loadUserByUsername(userEmail);
                 if (jwtService.isTokenValid(jwt, userDetails)) {
-                    final Long id_user = jwtService.extractUserId(jwt);
+//                    final Long id_user = jwtService.extractUserId(jwt);
 
-                    Set<PermissionModel> permissions = userService.findByIdWithPermissions(id_user);
-                    List<GrantedAuthority> authorities = permissions.stream()
-                            .map(permission -> new SimpleGrantedAuthority(permission.getName()))
-                            .collect(Collectors.toList());
+//                    Set<PermissionModel> permissions = userService.findByIdWithPermissions(id_user);
+//                    List<GrantedAuthority> authorities = permissions.stream()
+//                            .map(permission -> new SimpleGrantedAuthority(permission.getName()))
+//                            .collect(Collectors.toList());
 
                     UsernamePasswordAuthenticationToken authToken =
-                            new UsernamePasswordAuthenticationToken(userDetails, null, authorities);
+                            new UsernamePasswordAuthenticationToken(userDetails, null, null);
                     authToken
                             .setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
 
