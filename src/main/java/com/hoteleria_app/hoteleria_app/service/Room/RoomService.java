@@ -2,6 +2,8 @@ package com.hoteleria_app.hoteleria_app.service.Room;
 
 import com.hoteleria_app.hoteleria_app.model.Room.RoomModel;
 import com.hoteleria_app.hoteleria_app.repository.Room.RoomRepository;
+import jakarta.persistence.LockModeType;
+import org.springframework.data.jpa.repository.Lock;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -35,6 +37,11 @@ public class RoomService {
 
     public Long countReservedRoom(Long id, LocalDateTime initialReservationDate, LocalDateTime finalReservationDate) {
         return roomRepository.countReservedRoom(id, initialReservationDate, finalReservationDate);
+    }
+
+    @Lock(LockModeType.PESSIMISTIC_WRITE)
+    public RoomModel findRoomById(Long id) {
+        return roomRepository.findById(id).orElse(null);
     }
 
 }

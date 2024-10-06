@@ -16,7 +16,7 @@ import java.time.LocalDateTime;
 public class ReservationModel {
     @Id
     @Column(name = "id_reservation", nullable = false)
-    private Integer id;
+    private Long id;
 
     @NotNull
     @Column(name = "emition_date", nullable = false)

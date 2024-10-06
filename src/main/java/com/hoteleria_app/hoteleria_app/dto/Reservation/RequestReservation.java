@@ -10,6 +10,6 @@ public class RequestReservation {
 
     @Valid
     @NotNull(message = "roomReservations is required")
-    @Size(min = 1, message = "roomReservations must have at least one element")
+    @Size(min = 1, message = "room_reservations must have at least one element")
     public RoomReservation[] room_reservations;
 }

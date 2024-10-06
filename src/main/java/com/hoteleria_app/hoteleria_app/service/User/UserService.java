@@ -36,7 +36,7 @@ public class UserService {
     }
 
     public UserModel findById(Long id) {
-        return userRepository.findById(id).orElse(null);
+                        return userRepository.findById(id).orElse(null);
     }
 
     public Set<PermissionModel> findByIdWithPermissions(Long id) {

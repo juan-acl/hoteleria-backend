@@ -21,8 +21,8 @@ public class ReservationDetailService {
         return reservationDetailRepository.findById(id).orElse(null);
     }
 
-    public List<ReservationDetailModel> getAllReservationDetails(List<ReservationDetailModel> reservationDetails) {
-        return reservationDetailRepository.saveAll(reservationDetails);
+    public void createBatchDetailReservations(List<ReservationDetailModel> reservationDetails) {
+        reservationDetailRepository.saveAll(reservationDetails);
     }
 
 }

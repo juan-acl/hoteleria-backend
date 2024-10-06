@@ -2,6 +2,8 @@ package com.hoteleria_app.hoteleria_app.controller.Reservation;
 
 import com.hoteleria_app.hoteleria_app.dto.Reservation.RequestReservation;
 import com.hoteleria_app.hoteleria_app.dto.Reservation.ResponseReservationDto;
+import com.hoteleria_app.hoteleria_app.model.ReservationDetail.ReservationDetailModel;
+import com.hoteleria_app.hoteleria_app.service.Reservation.ReservationService;
 import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
@@ -13,6 +15,11 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequestMapping("/api/reservation")
 public class ReservationController {
+    private final ReservationService reservationService;
+
+    public ReservationController(ReservationService reservationService) {
+        this.reservationService = reservationService;
+    }
 
         @PostMapping("/createReservation")
         public ResponseEntity<ResponseReservationDto> createReservation(@RequestBody @Valid RequestReservation dataRoomReservation, BindingResult bindingResult) {
