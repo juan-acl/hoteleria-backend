@@ -6,8 +6,6 @@ import com.hoteleria_app.hoteleria_app.model.ReservationDetail.ReservationDetail
 import com.hoteleria_app.hoteleria_app.model.Room.RoomModel;
 import com.hoteleria_app.hoteleria_app.model.User.UserModel;
 import com.hoteleria_app.hoteleria_app.repository.Reservation.ReservationRepository;
-import com.hoteleria_app.hoteleria_app.repository.ReservationDetail.ReservationDetailRepository;
-import com.hoteleria_app.hoteleria_app.repository.Room.RoomRepository;
 import com.hoteleria_app.hoteleria_app.service.ReservationDetail.ReservationDetailService;
 import com.hoteleria_app.hoteleria_app.service.Room.RoomService;
 import com.hoteleria_app.hoteleria_app.service.User.UserService;
@@ -19,7 +17,7 @@ import java.util.List;
 
 @Service
 public class ReservationService {
-    private final String STATUS_RESERVATION = "ACTIVE";
+    private final String STATUS_RESERVATION = "CONFIRMED";
     private final Float INITIAL_TOTAL_PRICE = 0.0f;
 
     private final ReservationRepository reservationRepository;
@@ -77,10 +75,13 @@ public class ReservationService {
                 reservationDetail.setPrice(findRoom.getPrice());
                 detailReservation.add(reservationDetail);
             }
+            Float total = detailReservation.stream().reduce(INITIAL_TOTAL_PRICE, (subTotal, element) -> subTotal + element.getPrice(), Float::sum);
+            idReservation.setTotal(total);
+            updateReservation(idReservation);
             reservationDetailService.createBatchDetailReservations(detailReservation);
         return true;
         }catch(Exception error) {
-             throw new RuntimeException("Error");
+             throw new RuntimeException("Error creating reservation: " + error.getMessage());
         }
     }
 

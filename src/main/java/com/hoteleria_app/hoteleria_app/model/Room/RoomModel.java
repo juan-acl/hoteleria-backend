@@ -5,6 +5,7 @@ import com.hoteleria_app.hoteleria_app.model.RoomType.RoomTypeModel;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Size;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -24,6 +25,11 @@ public class RoomModel {
     @NotNull
     @Column(name = "available", nullable = false)
     private Byte available;
+
+    @NotNull
+    @Size(max = 500)
+    @Column(name = "name", nullable = false)
+    private String name;
 
     @NotNull
     @Column(name = "active", nullable = false)
