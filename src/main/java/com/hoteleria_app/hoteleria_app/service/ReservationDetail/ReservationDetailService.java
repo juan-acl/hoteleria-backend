@@ -22,7 +22,7 @@ public class ReservationDetailService {
     }
 
     public void createBatchDetailReservations(List<ReservationDetailModel> reservationDetails) {
-        reservationDetailRepository.saveAll(reservationDetails);
+            reservationDetailRepository.saveAll(reservationDetails);
     }
 
 }

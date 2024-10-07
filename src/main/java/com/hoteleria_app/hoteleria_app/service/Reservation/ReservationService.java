@@ -51,6 +51,7 @@ public class ReservationService {
             if(user == null) {
                 throw new RuntimeException("User not found");
             }
+
             List<ReservationDetailModel> detailReservation = new ArrayList<ReservationDetailModel>();
             ReservationModel reservation = new ReservationModel();
             reservation.setIdUser(user);
@@ -59,7 +60,8 @@ public class ReservationService {
             reservation.setEmitionDate(LocalDateTime.now());
             ReservationModel idReservation = createReservation(reservation);
             for (RoomReservation roomReservation : rooms) {
-                RoomModel findRoom = roomService.findById(roomReservation.getId_room());
+                
+                RoomModel findRoom = roomService.findRoomById(roomReservation.getId_room());
                 if(findRoom == null) {
                     throw new RuntimeException("Room not found");
                 }
