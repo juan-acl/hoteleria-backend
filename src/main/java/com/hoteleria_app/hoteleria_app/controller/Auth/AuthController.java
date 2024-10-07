@@ -1,7 +1,6 @@
 package com.hoteleria_app.hoteleria_app.controller.Auth;
 
 import java.util.Map;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
@@ -24,14 +23,15 @@ import jakarta.validation.Valid;
 @RequestMapping("/api/auth")
 public class AuthController {
 
-    @Autowired
-    private AuthenticationService authenticationService;
+    private final UserService userService;
+    private final AuthenticationService authenticationService;
+    private final JwtService jwtService;
 
-    @Autowired
-    private UserService userService;
-
-    @Autowired
-    private JwtService jwtService;
+    public AuthController(UserService userService, AuthenticationService authenticationService, JwtService jwtService) {
+        this.userService = userService;
+        this.authenticationService = authenticationService;
+        this.jwtService = jwtService;
+    }
 
     @PostMapping("/signIn")
     public ResponseEntity<LoginResponse> login(@RequestBody Map<String, String> loginRequest) {

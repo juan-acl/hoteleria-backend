@@ -14,6 +14,7 @@ import jakarta.mail.internet.MimeMessage;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.List;
+import java.text.DecimalFormat;
 
 @Service
 public class EmailService {
@@ -36,12 +37,15 @@ public class EmailService {
     public void sendEmail(UserModel user, String subject, String body, EmailHtmlDto htmlDto) throws Exception {
         MimeMessage mimeMessage = mailSender.createMimeMessage();
         MimeMessageHelper helper = new MimeMessageHelper(mimeMessage, true, "UTF-8");
+        DecimalFormat df = new DecimalFormat("#.00");
+        String formattedPrice = df.format(htmlDto.getTotalPrice());
+
 
         String htmlTemplate = loadTemplate();
 
         String htmlContent = htmlTemplate
                 .replace("{{username}}", user.getName() + " " + user.getLastname())
-                .replace("{{totalPrice}}", String.valueOf(htmlDto.getTotalPrice()))
+                .replace("{{totalPrice}}",  formattedPrice)
                 .replace("{{roomRows}}", generateRoomRows(htmlDto.getDescriptions()));
 
         helper.setTo(user.getEmail());
@@ -68,7 +72,7 @@ public class EmailService {
         try {
             UserModel user = userService.findById(id_user);
             Float totalPrice = reservationService.createReservation(id_user, rooms);
-            sendEmail(user, "Reservation created", "Your reservation has been created successfully", new EmailHtmlDto(totalPrice.toString(), rooms));
+            sendEmail(user, "Reservation created", "Your reservation has been created successfully", new EmailHtmlDto(totalPrice, rooms));
         }catch(Exception e) {
             throw new RuntimeException("Error on creating reservation: " + e.getMessage());
         }

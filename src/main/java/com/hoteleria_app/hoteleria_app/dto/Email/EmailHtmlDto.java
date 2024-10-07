@@ -13,6 +13,6 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 public class EmailHtmlDto {
-    public String totalPrice;
+    public Float totalPrice;
     public List<RoomReservation> descriptions;
 }
