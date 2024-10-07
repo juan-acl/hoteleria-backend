@@ -44,6 +44,16 @@ public class ReservationService {
         return reservationRepository.save(reservation);
     }
 
+    /**
+     * Crea una reserva para un usuario con las habitaciones especificadas.
+     * Este método es transaccional, lo que significa que si ocurre alguna excepción durante el proceso,
+     * todos los cambios se revertirán para mantener la integridad de los datos.
+     *
+     * @param id_user El ID del usuario que realiza la reserva.
+     * @param rooms Una lista de reservas de habitaciones que contiene los detalles de cada habitación a reservar.
+     * @return true si la reserva se crea correctamente, false en caso contrario.
+     * @throws RuntimeException si ocurre algún error durante el proceso de reserva.
+     */
     @Transactional
     public Boolean createReservation(Long id_user, List<RoomReservation> rooms ) {
         try {
@@ -60,6 +70,9 @@ public class ReservationService {
             reservation.setEmitionDate(LocalDateTime.now());
             ReservationModel idReservation = createReservation(reservation);
             for (RoomReservation roomReservation : rooms) {
+                if(roomReservation.getInitial_reservation_date().isBefore(LocalDateTime.now())) {
+                    throw new RuntimeException("Initial date must be after current date");
+                }
                 if(roomReservation.getInitial_reservation_date().isAfter((roomReservation.getFinal_reservation_date()))) {
                     throw new RuntimeException("Initial date must be before final date");
                 }
