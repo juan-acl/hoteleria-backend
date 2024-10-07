@@ -9,7 +9,6 @@ import com.hoteleria_app.hoteleria_app.repository.Reservation.ReservationReposit
 import com.hoteleria_app.hoteleria_app.service.ReservationDetail.ReservationDetailService;
 import com.hoteleria_app.hoteleria_app.service.Room.RoomService;
 import com.hoteleria_app.hoteleria_app.service.User.UserService;
-import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Service;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -54,8 +53,7 @@ public class ReservationService {
      * @return true si la reserva se crea correctamente, false en caso contrario.
      * @throws RuntimeException si ocurre algún error durante el proceso de reserva.
      */
-    @Transactional
-    public Boolean createReservation(Long id_user, List<RoomReservation> rooms ) {
+    public Float createReservation(Long id_user, List<RoomReservation> rooms ) {
         try {
             UserModel user = userService.findById(id_user);
             if(user == null) {
@@ -70,6 +68,8 @@ public class ReservationService {
             reservation.setEmitionDate(LocalDateTime.now());
             ReservationModel idReservation = createReservation(reservation);
             for (RoomReservation roomReservation : rooms) {
+
+                // Verifica si la fecha inicial de cada reserva es antes de la fecha actual
                 if(roomReservation.getInitial_reservation_date().isBefore(LocalDateTime.now())) {
                     throw new RuntimeException("Initial date must be after current date");
                 }
@@ -96,7 +96,7 @@ public class ReservationService {
             idReservation.setTotal(total);
             updateReservation(idReservation);
             reservationDetailService.createBatchDetailReservations(detailReservation);
-        return true;
+            return total;
         }catch(Exception error) {
              throw new RuntimeException("Error creating reservation: " + error.getMessage());
         }

@@ -27,7 +27,7 @@ public class SendEmailController {
             if (emailRequest.getBody() == null || emailRequest.getTo() == null || emailRequest.getSubject() == null) {
                 return ResponseEntity.ok().body(new EmailResponse(400, "All params are required!!"));
             }
-            emailService.sendEmail(emailRequest.getTo(), emailRequest.getSubject(), emailRequest.getBody());
+//            emailService.sendEmail(emailRequest.getTo(), emailRequest.getSubject(), emailRequest.getBody());
             return ResponseEntity.ok().body(new EmailResponse(200, "Email send succesfully"));
         } catch (Exception e) {
             return ResponseEntity.ok()
