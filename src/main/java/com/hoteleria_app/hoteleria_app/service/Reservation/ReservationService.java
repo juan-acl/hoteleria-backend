@@ -60,7 +60,9 @@ public class ReservationService {
             reservation.setEmitionDate(LocalDateTime.now());
             ReservationModel idReservation = createReservation(reservation);
             for (RoomReservation roomReservation : rooms) {
-                
+                if(roomReservation.getInitial_reservation_date().isAfter((roomReservation.getFinal_reservation_date()))) {
+                    throw new RuntimeException("Initial date must be before final date");
+                }
                 RoomModel findRoom = roomService.findRoomById(roomReservation.getId_room());
                 if(findRoom == null) {
                     throw new RuntimeException("Room not found");
