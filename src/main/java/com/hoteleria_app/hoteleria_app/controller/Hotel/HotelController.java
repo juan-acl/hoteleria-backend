@@ -30,7 +30,6 @@ public class HotelController {
     }
 
     @PostMapping("/getAllHotels")
-    @PreAuthorize("hasAuthority('ADMIN')")
     public ResponseGetAllHotelDto getAllHotels() {
         try {
             List<HotelModel> hotels = hotelService.getAllHotels();

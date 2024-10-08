@@ -22,9 +22,11 @@ public class EmailService {
     private final UserService userService;
     private final ReservationService reservationService;
 
-    private final String CURRENT_PATH = "src/main/resources/templates/index.html";
+    private final String CURRENT_PATH = "src/main/resources/templates/index" +
+            ".html";
 
-    public EmailService(JavaMailSender mailSender, UserService userService, ReservationService reservationService) {
+    public EmailService(JavaMailSender mailSender, UserService userService,
+                        ReservationService reservationService) {
         this.mailSender = mailSender;
         this.userService = userService;
         this.reservationService = reservationService;
@@ -34,9 +36,11 @@ public class EmailService {
         return new String(Files.readAllBytes(Paths.get(CURRENT_PATH)));
     }
 
-    public void sendEmail(UserModel user, String subject, String body, EmailHtmlDto htmlDto) throws Exception {
+    public void sendEmail(UserModel user, String subject, String body,
+                          EmailHtmlDto htmlDto) throws Exception {
         MimeMessage mimeMessage = mailSender.createMimeMessage();
-        MimeMessageHelper helper = new MimeMessageHelper(mimeMessage, true, "UTF-8");
+        MimeMessageHelper helper = new MimeMessageHelper(mimeMessage, true,
+                "UTF-8");
         DecimalFormat df = new DecimalFormat("#.00");
         String formattedPrice = df.format(htmlDto.getTotalPrice());
 
@@ -44,9 +48,11 @@ public class EmailService {
         String htmlTemplate = loadTemplate();
 
         String htmlContent = htmlTemplate
-                .replace("{{username}}", user.getName() + " " + user.getLastname())
-                .replace("{{totalPrice}}",  formattedPrice)
-                .replace("{{roomRows}}", generateRoomRows(htmlDto.getDescriptions()));
+                .replace("{{username}}",
+                        user.getName() + " " + user.getLastname())
+                .replace("{{totalPrice}}", formattedPrice)
+                .replace("{{roomRows}}",
+                        generateRoomRows(htmlDto.getDescriptions()));
 
         helper.setTo(user.getEmail());
         helper.setSubject(subject);
@@ -71,9 +77,12 @@ public class EmailService {
     public void createReservation(Long id_user, List<RoomReservation> rooms) {
         try {
             UserModel user = userService.findById(id_user);
-            Float totalPrice = reservationService.createReservation(id_user, rooms);
-            sendEmail(user, "Reservation created", "Your reservation has been created successfully", new EmailHtmlDto(totalPrice, rooms));
-        }catch(Exception e) {
+            Float totalPrice = reservationService.createReservation(id_user,
+                    rooms);
+            sendEmail(user, "Reservation created", "Your reservation has been" +
+                    " created successfully", new EmailHtmlDto(totalPrice,
+                    rooms));
+        } catch (Exception e) {
             throw new RuntimeException("Error on creating reservation: " + e.getMessage());
         }
     }
