@@ -35,7 +35,7 @@ public class ReservationController {
                 return ResponseEntity.status(200)
                         .body(new ResponseReservationDto("error", errors.toString()));
             }
-             emailService.createReservation(dataRoomReservation.getId_user(),
+             emailService.registerReservation(dataRoomReservation.getId_user(),
                     List.of(dataRoomReservation.getRoom_reservations()));
             return ResponseEntity.status(200)
                     .body(new ResponseReservationDto("success", "Reservation created"));

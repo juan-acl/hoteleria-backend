@@ -10,6 +10,8 @@ import com.hoteleria_app.hoteleria_app.service.ReservationDetail.ReservationDeta
 import com.hoteleria_app.hoteleria_app.service.Room.RoomService;
 import com.hoteleria_app.hoteleria_app.service.User.UserService;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Isolation;
+import org.springframework.transaction.annotation.Transactional;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -53,6 +55,7 @@ public class ReservationService {
      * @return true si la reserva se crea correctamente, false en caso contrario.
      * @throws RuntimeException si ocurre algún error durante el proceso de reserva.
      */
+    @Transactional(isolation = Isolation.SERIALIZABLE)
     public Float createReservation(Long id_user, List<RoomReservation> rooms ) {
         try {
             UserModel user = userService.findById(id_user);

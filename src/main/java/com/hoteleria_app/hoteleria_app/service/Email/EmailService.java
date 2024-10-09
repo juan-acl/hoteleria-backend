@@ -5,8 +5,8 @@ import com.hoteleria_app.hoteleria_app.dto.Reservation.RoomReservation;
 import com.hoteleria_app.hoteleria_app.model.User.UserModel;
 import com.hoteleria_app.hoteleria_app.service.Reservation.ReservationService;
 import com.hoteleria_app.hoteleria_app.service.User.UserService;
-import jakarta.transaction.Transactional;
 import org.springframework.mail.javamail.JavaMailSender;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Service;
 import jakarta.mail.internet.MimeMessage;
@@ -74,7 +74,7 @@ public class EmailService {
     }
 
     @Transactional
-    public void createReservation(Long id_user, List<RoomReservation> rooms) {
+    public void registerReservation(Long id_user, List<RoomReservation> rooms) {
         try {
             UserModel user = userService.findById(id_user);
             Float totalPrice = reservationService.createReservation(id_user,

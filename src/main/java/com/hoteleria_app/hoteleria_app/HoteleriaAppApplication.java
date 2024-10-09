@@ -4,6 +4,7 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.http.ResponseEntity;
 
+import org.springframework.transaction.annotation.EnableTransactionManagement;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
@@ -12,6 +13,7 @@ import com.hoteleria_app.hoteleria_app.dto.EmailDto.EmailResponse;
 
 @SpringBootApplication
 @RestController
+@EnableTransactionManagement
 public class HoteleriaAppApplication {
 
 	public static void main(String[] args) {
