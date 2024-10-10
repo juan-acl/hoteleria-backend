@@ -21,7 +21,6 @@ public class ReservationController {
     public ReservationController(EmailService emailService) {
         this.emailService = emailService;
     }
-
     @PostMapping("/createReservation")
     public ResponseEntity<ResponseReservationDto> createReservation(
             @RequestBody @Valid RequestReservation dataRoomReservation,
@@ -35,7 +34,7 @@ public class ReservationController {
                 return ResponseEntity.status(200)
                         .body(new ResponseReservationDto("error", errors.toString()));
             }
-             emailService.registerReservation(dataRoomReservation.getId_user(),
+            emailService.registerReservation(dataRoomReservation.getId_user(),
                     List.of(dataRoomReservation.getRoom_reservations()));
             return ResponseEntity.status(200)
                     .body(new ResponseReservationDto("success", "Reservation created"));
@@ -44,4 +43,5 @@ public class ReservationController {
                     .body(new ResponseReservationDto("error", error.getMessage()));
         }
     }
+
 }

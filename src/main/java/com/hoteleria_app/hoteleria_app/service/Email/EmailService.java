@@ -6,6 +6,7 @@ import com.hoteleria_app.hoteleria_app.model.User.UserModel;
 import com.hoteleria_app.hoteleria_app.service.Reservation.ReservationService;
 import com.hoteleria_app.hoteleria_app.service.User.UserService;
 import org.springframework.mail.javamail.JavaMailSender;
+import org.springframework.transaction.annotation.Isolation;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Service;
@@ -73,17 +74,18 @@ public class EmailService {
         return rows.toString();
     }
 
-    @Transactional
+    @Transactional(isolation = Isolation.SERIALIZABLE)
     public void registerReservation(Long id_user, List<RoomReservation> rooms) {
         try {
             UserModel user = userService.findById(id_user);
             Float totalPrice = reservationService.createReservation(id_user,
                     rooms);
-            sendEmail(user, "Reservation created", "Your reservation has been" +
-                    " created successfully", new EmailHtmlDto(totalPrice,
-                    rooms));
+            //sendEmail(user, "Reservation created", "Your reservation has " +
+              //      "been" +
+                //    " created successfully", new EmailHtmlDto(totalPrice,
+                  //  rooms));
         } catch (Exception e) {
-            throw new RuntimeException("Error on creating reservation: " + e.getMessage());
+            throw new RuntimeException(e.getMessage());
         }
     }
 }

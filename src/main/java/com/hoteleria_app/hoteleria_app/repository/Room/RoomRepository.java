@@ -1,13 +1,17 @@
 package com.hoteleria_app.hoteleria_app.repository.Room;
 
 import com.hoteleria_app.hoteleria_app.model.Room.RoomModel;
+import jakarta.persistence.LockModeType;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Lock;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
 import java.time.LocalDateTime;
 
 public interface RoomRepository extends JpaRepository<RoomModel, Long> {
+    @Lock(LockModeType.PESSIMISTIC_WRITE)
     RoomModel findById(long id);
 
     @Query("UPDATE RoomModel r SET r.available = :available WHERE r.id = :id")
@@ -16,6 +20,7 @@ public interface RoomRepository extends JpaRepository<RoomModel, Long> {
     @Query("UPDATE RoomModel r SET r.active = :active WHERE r.id = :id")
     RoomModel updateActive(@Param("id") long id, @Param("active") boolean active);
 
+    @Lock(LockModeType.PESSIMISTIC_WRITE)
     @Query("SELECT COUNT(rd) FROM ReservationDetailModel rd " +
             "WHERE rd.idRoom.id = :id " +
             "AND (" +
