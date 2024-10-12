@@ -24,7 +24,7 @@ public class RoomModel {
 
     @NotNull
     @Column(name = "available", nullable = false)
-    private Byte available;
+    private Integer available;
 
     @NotNull
     @Size(max = 500)

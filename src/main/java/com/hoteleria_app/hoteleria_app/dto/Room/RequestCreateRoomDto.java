@@ -10,29 +10,26 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 public class RequestCreateRoomDto {
-    @NotNull(message = "Room_number is required")
-    @NotEmpty(message = "Room_number is required")
-    private String room_numbre;
+    @NotNull(message = "Room number is required")
+    @NotEmpty(message = "Room number is required")
+    private Integer roomNumber;
 
     @NotNull(message = "Avaliable is required")
     @NotEmpty(message = "Avaliable is required")
-    private double avaliable;
+    private Integer avaliable;
+
+    @NotNull(message = "Name hotel is required")
+    @NotEmpty(message = "Name hotel is required")
+    private String name;
 
     @NotNull(message = "Price is required")
     @NotEmpty(message = "Price is required")
-    private double price ;
+    private Float price ;
 
     @NotNull(message = "Id_room_type is required")
-    private int id_room_type;
+    private Long id_room_type;
 
     @NotNull(message = "Id_hotel is required")
-    private Float id_hotel;
+    private Long id_hotel;
 
-    @NotNull(message = "Description is required")
-    @NotEmpty(message = "Description is required")
-    private int activate;
-
-    @NotNull(message = "Description is required")
-    @NotEmpty(message = "Description is required")
-    private int name;
 }

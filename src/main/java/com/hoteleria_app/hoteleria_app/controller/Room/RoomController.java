@@ -1,10 +1,13 @@
 package com.hoteleria_app.hoteleria_app.controller.Room;
 
+import com.hoteleria_app.hoteleria_app.dto.Room.RequestCreateRoomDto;
 import com.hoteleria_app.hoteleria_app.dto.Room.ResponseRoomDto;
 import com.hoteleria_app.hoteleria_app.dto.Room.ResponseRoomReservedDto;
+import com.hoteleria_app.hoteleria_app.model.Room.RoomModel;
 import com.hoteleria_app.hoteleria_app.repository.Room.RoomRepository;
 import com.hoteleria_app.hoteleria_app.service.Room.RoomService;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -36,6 +39,25 @@ public class RoomController {
             return ResponseEntity.status(200).body(new ResponseRoomDto("success", "Room is not reserved",responseRoomReservedDto));
         } catch (Exception error) {
             return ResponseEntity.status(200).body(new ResponseRoomDto("success", "Error",null));
+        }
+    }
+    @PostMapping("/createRoom")
+    public ResponseEntity<ResponseRoomDto> createRoom(@RequestBody RequestCreateRoomDto room, BindingResult bindingResult) {
+        try {
+            if(bindingResult.hasErrors()) {
+                StringBuilder errorMessage = new StringBuilder();
+                bindingResult.getAllErrors().forEach(error -> {
+                    errorMessage.append(error.getDefaultMessage()).append("; ");
+                });
+                return ResponseEntity.status(400).body(new ResponseRoomDto("error", errorMessage.toString(), null));
+            }
+            RoomModel newRoom = roomService.createRoom(room);
+            if(newRoom == null) {
+                return ResponseEntity.status(200).body(new ResponseRoomDto("error", "Error", null));
+            }
+            return ResponseEntity.status(200).body(new ResponseRoomDto("success", "Room created", null));
+        }catch(Exception e) {
+            return ResponseEntity.status(200).body(new ResponseRoomDto("error", "Error", null));
         }
     }
 
