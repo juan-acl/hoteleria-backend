@@ -1,7 +1,8 @@
 package com.hoteleria_app.hoteleria_app.service.Email;
 
-import com.hoteleria_app.hoteleria_app.dto.Email.EmailHtmlDto;
+import com.hoteleria_app.hoteleria_app.dto.Reservation.ResponseCreateReservationForHtml;
 import com.hoteleria_app.hoteleria_app.dto.Reservation.RoomReservation;
+import com.hoteleria_app.hoteleria_app.dto.Reservation.RoomsDtoForEmail;
 import com.hoteleria_app.hoteleria_app.model.User.UserModel;
 import com.hoteleria_app.hoteleria_app.service.Reservation.ReservationService;
 import com.hoteleria_app.hoteleria_app.service.User.UserService;
@@ -38,7 +39,7 @@ public class EmailService {
     }
 
     public void sendEmail(UserModel user, String subject, String body,
-                          EmailHtmlDto htmlDto) throws Exception {
+                          ResponseCreateReservationForHtml htmlDto) throws Exception {
         MimeMessage mimeMessage = mailSender.createMimeMessage();
         MimeMessageHelper helper = new MimeMessageHelper(mimeMessage, true,
                 "UTF-8");
@@ -53,7 +54,7 @@ public class EmailService {
                         user.getName() + " " + user.getLastname())
                 .replace("{{totalPrice}}", formattedPrice)
                 .replace("{{roomRows}}",
-                        generateRoomRows(htmlDto.getDescriptions()));
+                        generateRoomRows(htmlDto.getRoomsDtoForEmails()));
 
         helper.setTo(user.getEmail());
         helper.setSubject(subject);
@@ -62,13 +63,14 @@ public class EmailService {
         mailSender.send(mimeMessage);
     }
 
-    private String generateRoomRows(List<RoomReservation> details) {
+    private String generateRoomRows(List<RoomsDtoForEmail> details) {
         StringBuilder rows = new StringBuilder();
-        for (RoomReservation detail : details) {
+        for (RoomsDtoForEmail detail : details) {
             rows.append("<tr>")
                     .append("<td>").append(detail.getId_room()).append("</td>")
                     .append("<td>").append(detail.getInitial_reservation_date()).append("</td>")
                     .append("<td>").append(detail.getFinal_reservation_date()).append("</td>")
+                    .append("<td>").append(detail.getPriceRoom()).append("</td>")
                     .append("</tr>");
         }
         return rows.toString();
@@ -78,12 +80,14 @@ public class EmailService {
     public void registerReservation(Long id_user, List<RoomReservation> rooms) {
         try {
             UserModel user = userService.findById(id_user);
-            Float totalPrice = reservationService.createReservation(id_user,
+            ResponseCreateReservationForHtml roomInformationForEmail =
+                    reservationService.createReservation(id_user,
                     rooms);
-            //sendEmail(user, "Reservation created", "Your reservation has " +
-              //      "been" +
-                //    " created successfully", new EmailHtmlDto(totalPrice,
-                  //  rooms));
+            sendEmail(user, "Reservation created", "Your reservation has " +
+                    "been" +
+                    " created successfully",
+                    new ResponseCreateReservationForHtml(roomInformationForEmail.totalPrice,
+                    roomInformationForEmail.getRoomsDtoForEmails()));
         } catch (Exception e) {
             throw new RuntimeException(e.getMessage());
         }

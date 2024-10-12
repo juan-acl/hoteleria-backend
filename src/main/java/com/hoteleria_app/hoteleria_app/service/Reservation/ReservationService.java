@@ -1,6 +1,8 @@
 package com.hoteleria_app.hoteleria_app.service.Reservation;
 
+import com.hoteleria_app.hoteleria_app.dto.Reservation.ResponseCreateReservationForHtml;
 import com.hoteleria_app.hoteleria_app.dto.Reservation.RoomReservation;
+import com.hoteleria_app.hoteleria_app.dto.Reservation.RoomsDtoForEmail;
 import com.hoteleria_app.hoteleria_app.model.Reservation.ReservationModel;
 import com.hoteleria_app.hoteleria_app.model.ReservationDetail.ReservationDetailModel;
 import com.hoteleria_app.hoteleria_app.model.Room.RoomModel;
@@ -64,8 +66,8 @@ public class ReservationService {
      * reserva.
      */
     @Transactional
-    public  Float createReservation(Long id_user,
-                                                List<RoomReservation> rooms) {
+    public ResponseCreateReservationForHtml createReservation(Long id_user,
+                                                              List<RoomReservation> rooms) {
         try {
             UserModel user = userService.findById(id_user);
             if (user == null) {
@@ -74,12 +76,16 @@ public class ReservationService {
 
             List<ReservationDetailModel> detailReservation =
                     new ArrayList<ReservationDetailModel>();
+            List<RoomsDtoForEmail> RoomsDtoForEmail =
+                    new ArrayList<RoomsDtoForEmail>();
             ReservationModel reservation = new ReservationModel();
             reservation.setIdUser(user);
             reservation.setStatus(STATUS_RESERVATION);
             reservation.setTotal(INITIAL_TOTAL_PRICE);
             reservation.setEmitionDate(LocalDateTime.now());
             ReservationModel idReservation = createReservation(reservation);
+            ResponseCreateReservationForHtml roomInfoForEmail = new ResponseCreateReservationForHtml();
+
             for (RoomReservation roomReservation : rooms) {
 
                 // Verifica si la fecha inicial de cada reserva es antes de
@@ -97,6 +103,10 @@ public class ReservationService {
                 if (findRoom == null) {
                     throw new RuntimeException("Room not found");
                 }
+                RoomsDtoForEmail.add(new RoomsDtoForEmail(roomReservation.getInitial_reservation_date(),
+                        roomReservation.getFinal_reservation_date(),
+                        findRoom.getPrice(),
+                        roomReservation.getId_room()));
                     Long isReservedRoom = roomService.countReservedRoom(roomReservation.getId_room(), roomReservation.getInitial_reservation_date(), roomReservation.getFinal_reservation_date());
                     if(isReservedRoom > 0) {
                         throw new RuntimeException("Room is reserved in this date");
@@ -117,7 +127,9 @@ public class ReservationService {
             idReservation.setTotal(total);
             updateReservation(idReservation);
             reservationDetailService.createBatchDetailReservations(detailReservation);
-            return total;
+            roomInfoForEmail.setTotalPrice(total);
+            roomInfoForEmail.setRoomsDtoForEmails(RoomsDtoForEmail);
+            return roomInfoForEmail;
         } catch (Exception error) {
             throw new RuntimeException("Error creating reservation: " + error.getMessage());
         }
