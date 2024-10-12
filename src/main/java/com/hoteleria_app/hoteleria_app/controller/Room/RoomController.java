@@ -1,63 +1,120 @@
 package com.hoteleria_app.hoteleria_app.controller.Room;
 
-import com.hoteleria_app.hoteleria_app.dto.Room.RequestCreateRoomDto;
-import com.hoteleria_app.hoteleria_app.dto.Room.ResponseRoomDto;
-import com.hoteleria_app.hoteleria_app.dto.Room.ResponseRoomReservedDto;
+import com.hoteleria_app.hoteleria_app.dto.Room.*;
 import com.hoteleria_app.hoteleria_app.model.Room.RoomModel;
-import com.hoteleria_app.hoteleria_app.repository.Room.RoomRepository;
 import com.hoteleria_app.hoteleria_app.service.Room.RoomService;
+import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import com.hoteleria_app.hoteleria_app.dto.Room.RequestIsReservedDto;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.HashSet;
+import java.util.Set;
+import org.springframework.http.HttpStatus;
 
 @RestController
 @RequestMapping("/api/room")
 public class RoomController {
-    private final RoomRepository roomRepository;
     private final RoomService roomService;
 
-    public RoomController(RoomRepository roomRepository, RoomService roomService) {
-        this.roomRepository = roomRepository;
+    public RoomController(
+            RoomService roomService) {
         this.roomService = roomService;
     }
 
-    @PostMapping("/isReserved")
-    public ResponseEntity<ResponseRoomDto> isReserved(@RequestBody RequestIsReservedDto roomBody) {
-        try {
-            Long room = roomService.countReservedRoom(roomBody.getId(), roomBody.getInitialReservationDate(), roomBody.getFinalReservationDate());
-            ResponseRoomReservedDto responseRoomReservedDto = new ResponseRoomReservedDto();
-            responseRoomReservedDto.setCountReserved(room);
-            if(room > 0) {
-                responseRoomReservedDto.setIsReserved(true);
-                return ResponseEntity.status(200).body(new ResponseRoomDto("success", "Room is reserved", responseRoomReservedDto));
-            }
-            responseRoomReservedDto.setIsReserved(false);
-            return ResponseEntity.status(200).body(new ResponseRoomDto("success", "Room is not reserved",responseRoomReservedDto));
-        } catch (Exception error) {
-            return ResponseEntity.status(200).body(new ResponseRoomDto("success", "Error",null));
-        }
-    }
     @PostMapping("/createRoom")
-    public ResponseEntity<ResponseRoomDto> createRoom(@RequestBody RequestCreateRoomDto room, BindingResult bindingResult) {
+    public ResponseEntity<ResponseRoomDto> createRoom(@RequestBody @Valid RequestCreateRoomDto room, BindingResult bindingResult) {
         try {
-            if(bindingResult.hasErrors()) {
+            if (bindingResult.hasErrors()) {
                 StringBuilder errorMessage = new StringBuilder();
                 bindingResult.getAllErrors().forEach(error -> {
                     errorMessage.append(error.getDefaultMessage()).append("; ");
                 });
-                return ResponseEntity.status(400).body(new ResponseRoomDto("error", errorMessage.toString(), null));
+                return ResponseEntity.status(400).body(new ResponseRoomDto(
+                        "error", errorMessage.toString(), null));
             }
             RoomModel newRoom = roomService.createRoom(room);
-            if(newRoom == null) {
-                return ResponseEntity.status(200).body(new ResponseRoomDto("error", "Error", null));
+            if (newRoom == null) {
+                return ResponseEntity.status(200).body(new ResponseRoomDto(
+                        "error", "Error", null));
             }
-            return ResponseEntity.status(200).body(new ResponseRoomDto("success", "Room created", null));
-        }catch(Exception e) {
-            return ResponseEntity.status(200).body(new ResponseRoomDto("error", "Error", null));
+            return ResponseEntity.status(200).body(new ResponseRoomDto(
+                    "success", "Room created", null));
+        } catch (Exception e) {
+            return ResponseEntity.status(200).body(new ResponseRoomDto("error"
+                    , "Error", null));
+        }
+    }
+
+    @PostMapping("/updateRoom")
+    public ResponseEntity<ResponseRoomDto> updateRoom(@RequestBody @Valid RequestUpdateRoomDto updateRoom
+            , BindingResult bindingResult) {
+        try {
+            if (bindingResult.hasErrors()) {
+                StringBuilder errorMessage = new StringBuilder();
+                bindingResult.getAllErrors().forEach(error -> {
+                    errorMessage.append(error.getDefaultMessage()).append("; ");
+                });
+                return ResponseEntity.status(400).body(new ResponseRoomDto(
+                        "error", errorMessage.toString(), null));
+            }
+            String room = roomService.updateRoom(updateRoom);
+            if (room == null) {
+                return ResponseEntity.status(200).body(new ResponseRoomDto(
+                        "error", "Error:" + room, null));
+            }
+            return ResponseEntity.status(200).body(new ResponseRoomDto(
+                    "success", "Room updated", null));
+        } catch (Exception e) {
+            return ResponseEntity.status(200).body(new ResponseRoomDto("error"
+                    , "Error", null));
+        }
+    }
+
+    @PostMapping("/deleteRoom")
+    public ResponseEntity<ResponseRoomDto> deleteRoom(@RequestBody @Valid DeleteRoomDto deleteRoom,
+                                                      BindingResult bindingResult) {
+        try {
+            if (bindingResult.hasErrors()) {
+                StringBuilder errorMessage = new StringBuilder();
+                bindingResult.getAllErrors().forEach(error -> {
+                    errorMessage.append(error.getDefaultMessage()).append("; ");
+                });
+                return ResponseEntity.status(400).body(new ResponseRoomDto(
+                        "error", errorMessage.toString(), null));
+            }
+            roomService.updateRoomActive(deleteRoom.getId_room(), false);
+            return ResponseEntity.status(200).body(new ResponseRoomDto(
+                    "success", "Room deleted", null));
+        } catch (Exception e) {
+            return ResponseEntity.status(200).body(new ResponseRoomDto("error"
+                    , "Error", null));
+        }
+    }
+
+    @GetMapping("/getRooms")
+    public ResponseEntity<Set<RoomModel>> getRooms() {
+        try {
+            Set<RoomModel> rooms = roomService.getAllRooms();
+            return new ResponseEntity<>(rooms, HttpStatus.OK);
+        } catch (Exception e) {
+            return new ResponseEntity<>(new HashSet<>(), HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    @PostMapping("/getRoomById")
+    public ResponseEntity<RoomModel> getRoomById(@RequestBody @Valid RequestGetRoomByldDto requestGetRoomByldDto, BindingResult bindingResult) {
+        try {
+            if(bindingResult.hasErrors()){
+                return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
+            }
+            RoomModel room = roomService.findById(requestGetRoomByldDto.getId_room());
+            if(room == null) {
+                return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
+            }
+            return new ResponseEntity<>(room, HttpStatus.OK);
+        }catch (Exception e) {
+            return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 

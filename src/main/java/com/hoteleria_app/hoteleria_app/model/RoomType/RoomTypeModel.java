@@ -1,5 +1,6 @@
 package com.hoteleria_app.hoteleria_app.model.RoomType;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
@@ -39,6 +40,7 @@ public class RoomTypeModel {
     @Column(name = "maximum_people", nullable = false)
     private Integer maximumPeople;
 
+    @JsonBackReference
     @OneToMany(mappedBy = "idRoomType", fetch = FetchType.EAGER)
     private Set<RoomModel> rooms = new LinkedHashSet<>();
 

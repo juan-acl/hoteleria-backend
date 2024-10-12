@@ -1,6 +1,7 @@
 package com.hoteleria_app.hoteleria_app.service.Room;
 
 import com.hoteleria_app.hoteleria_app.dto.Room.RequestCreateRoomDto;
+import com.hoteleria_app.hoteleria_app.dto.Room.RequestUpdateRoomDto;
 import com.hoteleria_app.hoteleria_app.model.Hotel.HotelModel;
 import com.hoteleria_app.hoteleria_app.model.Room.RoomModel;
 import com.hoteleria_app.hoteleria_app.model.RoomType.RoomTypeModel;
@@ -10,6 +11,8 @@ import com.hoteleria_app.hoteleria_app.service.RoomType.RoomTypeService;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.util.Set;
+import java.util.HashSet;
 
 @Service
 public class RoomService {
@@ -22,6 +25,10 @@ public class RoomService {
         this.roomRepository = roomRepository;
         this.roomTypeService = roomTypeService;
         this.hotelRepository = hotelRepository;
+    }
+
+    public Set<RoomModel> getAllRooms() {
+        return new HashSet<>(roomRepository.findAll());
     }
 
     public RoomModel findById(Long id_hotel) {
@@ -50,16 +57,33 @@ public class RoomService {
         return roomRepository.save(newRoom);
     }
 
-    public RoomModel updateRoomAvailable(Long id, Boolean available) {
-        return roomRepository.updateAvailable(id, available);
-    }
-
     public RoomModel updateRoomActive(Long id, Boolean active) {
         return roomRepository.updateActive(id, active);
     }
 
-    public RoomModel updateRoom(RoomModel room) {
-        return roomRepository.save(room);
+    public String updateRoom(RequestUpdateRoomDto room) {
+        RoomModel roomUpdate = roomRepository.findById(room.getId_room()).orElse(null);
+        if(roomUpdate == null) {
+            return "Room not found";
+        }
+        RoomTypeModel roomTypeModel =
+                roomTypeService.getRoomTypeById(room.getId_room_type());
+        if(roomTypeModel == null) {
+            return "Room type not found";
+        }
+        HotelModel hotelModel =
+                hotelRepository.findById(room.getId_hotel()).orElse(null);
+        if(hotelModel == null) {
+            return "Hotel not found";
+        }
+        roomUpdate.setRoomNumber(room.getRoomNumber());
+        roomUpdate.setAvailable(room.getAvaliable());
+        roomUpdate.setPrice(room.getPrice());
+        roomUpdate.setIdRoomType(roomTypeModel);
+        roomUpdate.setIdHotel(hotelModel);
+        roomUpdate.setName(room.getName());
+        roomRepository.save(roomUpdate);
+        return null;
     }
 
     public Long countReservedRoom(Long id, LocalDateTime initialReservationDate, LocalDateTime finalReservationDate) {
