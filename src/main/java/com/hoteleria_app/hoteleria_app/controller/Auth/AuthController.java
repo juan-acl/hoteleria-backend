@@ -27,7 +27,8 @@ public class AuthController {
     private final AuthenticationService authenticationService;
     private final JwtService jwtService;
 
-    public AuthController(UserService userService, AuthenticationService authenticationService, JwtService jwtService) {
+    public AuthController(UserService userService, AuthenticationService authenticationService,
+            JwtService jwtService) {
         this.userService = userService;
         this.authenticationService = authenticationService;
         this.jwtService = jwtService;
@@ -43,7 +44,7 @@ public class AuthController {
             return ResponseEntity
                     .ok(new LoginResponse(HttpStatus.OK.value(), "Login successful", jwtToken));
         } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
+            return ResponseEntity.status(HttpStatus.ACCEPTED)
                     .body(new LoginResponse(HttpStatus.UNAUTHORIZED.value(),
                             "Invalid username or password: " + e.getMessage() + " " + e.getCause(),
                             null));
