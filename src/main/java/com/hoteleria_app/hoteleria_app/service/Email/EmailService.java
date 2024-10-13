@@ -15,6 +15,8 @@ import jakarta.mail.internet.MimeMessage;
 
 import java.nio.file.Files;
 import java.nio.file.Paths;
+import java.time.format.DateTimeFormatter;
+import java.time.temporal.ChronoUnit;
 import java.util.List;
 import java.text.DecimalFormat;
 
@@ -65,12 +67,20 @@ public class EmailService {
 
     private String generateRoomRows(List<RoomsDtoForEmail> details) {
         StringBuilder rows = new StringBuilder();
+        DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
         for (RoomsDtoForEmail detail : details) {
+            long quantityDaysReserved = ChronoUnit.DAYS.between(
+                    detail.getInitial_reservation_date().toLocalDate(),
+                    detail.getFinal_reservation_date().toLocalDate()
+            );
+            Float subTotal = detail.getPriceRoom() * quantityDaysReserved;
             rows.append("<tr>")
                     .append("<td>").append(detail.getId_room()).append("</td>")
-                    .append("<td>").append(detail.getInitial_reservation_date()).append("</td>")
-                    .append("<td>").append(detail.getFinal_reservation_date()).append("</td>")
+                    .append("<td>").append(detail.getInitial_reservation_date().format(dateFormatter)).append("</td>")
+                    .append("<td>").append(detail.getFinal_reservation_date().format(dateFormatter)).append("</td>")
+                    .append("<td>").append(quantityDaysReserved).append("</td>")
                     .append("<td>").append(detail.getPriceRoom()).append("</td>")
+                    .append("<td>").append(subTotal).append("</td>")
                     .append("</tr>");
         }
         return rows.toString();
@@ -83,9 +93,7 @@ public class EmailService {
             ResponseCreateReservationForHtml roomInformationForEmail =
                     reservationService.createReservation(id_user,
                     rooms);
-            sendEmail(user, "Reservation created", "Your reservation has " +
-                    "been" +
-                    " created successfully",
+            sendEmail(user, "Reservación creada exitosamente", "Reservación creada",
                     new ResponseCreateReservationForHtml(roomInformationForEmail.totalPrice,
                     roomInformationForEmail.getRoomsDtoForEmails()));
         } catch (Exception e) {

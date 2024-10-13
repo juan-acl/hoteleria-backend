@@ -15,6 +15,5 @@ public class RoomsDtoForEmail {
     public LocalDateTime initial_reservation_date;
     public LocalDateTime final_reservation_date;
     public Float priceRoom;
-    public Long id_room;
-
+    public Integer id_room;
 }
