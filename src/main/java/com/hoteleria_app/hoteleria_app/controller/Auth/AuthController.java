@@ -67,7 +67,7 @@ public class AuthController {
 
             UserModel findUser = userService.findByEmail(user.getEmail());
             if (findUser != null) {
-                return ResponseEntity.status(400)
+                return ResponseEntity.status(200)
                         .body(new UserResponse("error", "User already exists", 0, null));
             }
 
