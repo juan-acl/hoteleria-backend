@@ -43,7 +43,7 @@ public class SecurityConfig {
                 .disable()
                 .cors().and() // Habilita CORS
                 .authorizeHttpRequests()
-                .requestMatchers("/", "/api/auth/**").permitAll() // Solo
+                .requestMatchers("/", "/api/auth/**", "/api/hotel/getAllHotels").permitAll() // Solo
                 // permite rutas de autenticación pública
                 .anyRequest().authenticated() // Autenticación requerida para todo lo demás
                 .and()
